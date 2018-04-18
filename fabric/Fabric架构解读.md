@@ -1,6 +1,6 @@
 
 
-# Hyperledger Fabric 架构解析
+# Hyperledger Fabric 架构解读
 
 
 ## 前言
@@ -164,7 +164,7 @@ Channel中每个成员的Leading Peer的选举决定了哪个peer代表成员与
 
 虽然任何一个锚点可以属于多个通道，并且因此维护多个账本，但没有账本数据可以从一个channel传递到另一个channel。账本按channel分隔，由configuration chaincode，identity membership service和gossip数据传播协议来定义和实现。被隔离的数据包括交易信息，账本状态和channel成员资料，这些数据仅限于在channel上具有可验证成员资格的peer间传播。通过信道隔离peer和账本数据，允许需要私有和机密事务的网络成员与同一个块链网络上的业务竞争对手和其他受限制的成员共存。
 
-![](./images/fabric.multi.Channel.png)
+![](./images/fabric.multi.channel.png)
 
 在上图中，一共有两个通道，
 
