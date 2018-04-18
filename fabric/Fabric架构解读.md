@@ -131,10 +131,10 @@ Fabric CA提供了两种访问方式调用Server服务，一种是通过Client�
 --------------------------
 ## 账本
 
-如下图所示，Fabric的账本数据包括以下几个部分：
+如下图所示，Fabric的账本数据结构包括以下几个部分：
 * 区块链数据(Blockchain Data)
 * 状态数据(State Database)
-* 索引数据
+* 索引数据(Index Database)
 
 ![](./images/fabric.ledger.png)
 
