@@ -10,6 +10,7 @@ XChainLab Documentation.
     - [精通比特币二](bitcoin/精通比特币二.docx)
     - [精通比特币之三钱包和交易](bitcoin/精通比特币之三钱包和交易.md)
     - [精通比特币之四交易详细分析](bitcoin/精通比特币之四交易详细分析.md)
+    - [比特币交易源码分析](bitcoin/交易源码分析.pdf)
 - 以太坊
 - EOS
 - 扩展性
