@@ -142,6 +142,8 @@ virtual void initialize(const variables_map& options) override {
 ```
 </br>
 plugin_requires，这个函数的定义就通过宏来产生了。
+</br>
+
 ``` C++
 //先看一个调用实现
 class chain_plugin : public plugin<chain_plugin> {
@@ -176,7 +178,10 @@ public:
 
 ### 1、使用了较多的宏，并配合BOOST库。
 </br>
+
 在EOS的代码中，可以隐约看到类似MFC的代码实现机制，举一个例子：
+</br>
+
 ``` C++
 #define FC_CAPTURE_AND_RETHROW( ... ) \
    catch( fc::exception& er ) { \
