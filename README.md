@@ -18,6 +18,7 @@ XChainLab Documentation.
 - [EOS]
    - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
 - 扩展性
+    - [plasma](scalability/plasma/plasma-in-10-mins.md)
 - 共识机制
     - [raft](http://thesecretlivesofdata.com/raft/)
 - 虚拟机
