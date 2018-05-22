@@ -15,7 +15,7 @@ XChainLab Documentation.
     - [精通比特币之六区块链](bitcoin/精通比特币之六区块链.md)
 - 以太坊
 - [EOS]
-  - [eos源码分析之一整体介绍](eos源码分析之一整体介绍.md)
+   - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
 - 扩展性
 - 共识机制
     - [raft](http://thesecretlivesofdata.com/raft/)
