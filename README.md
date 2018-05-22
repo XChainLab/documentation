@@ -12,8 +12,10 @@ XChainLab Documentation.
     - [精通比特币之四交易详细分析](bitcoin/精通比特币之四交易详细分析.md)
     - [比特币交易源码分析](bitcoin/交易源码分析.pdf)
     - [精通比特币之五网络](bitcoin/精通比特币之五网络.md)
+    - [精通比特币之六区块链](bitcoin/精通比特币之六区块链.md)
 - 以太坊
-- EOS
+- [EOS]
+  - [eos源码分析之一整体介绍](eos源码分析之一整体介绍.md)
 - 扩展性
 - 共识机制
     - [raft](http://thesecretlivesofdata.com/raft/)
