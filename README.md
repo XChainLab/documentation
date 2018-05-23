@@ -19,6 +19,7 @@ XChainLab Documentation.
    - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
+    - [Making Sense of Ethereum’s Layer 2 Scaling Solutions: State Channels, Plasma, and Truebit](https://medium.com/l4-media/making-sense-of-ethereums-layer-2-scaling-solutions-state-channels-plasma-and-truebit-22cb40dcc2f4)
 - 共识机制
     - [raft](http://thesecretlivesofdata.com/raft/)
 - 虚拟机
