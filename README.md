@@ -1,4 +1,4 @@
-# 目录 
+# 目录
 XChainLab Documentation.
 
 
@@ -22,6 +22,7 @@ XChainLab Documentation.
     - [Making Sense of Ethereum’s Layer 2 Scaling Solutions: State Channels, Plasma, and Truebit](https://medium.com/l4-media/making-sense-of-ethereums-layer-2-scaling-solutions-state-channels-plasma-and-truebit-22cb40dcc2f4)
 - 共识机制
     - [raft](http://thesecretlivesofdata.com/raft/)
+    - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
 - 虚拟机
 - 密码学
 - [相关文章翻译](translate/translate-readme.md)

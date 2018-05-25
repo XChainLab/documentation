@@ -199,24 +199,24 @@ worker对象是在创建Miner对象的时候创建的，它会根据Miner结构�
 ```go
 func newWorker(config *params.ChainConfig, engine consensus.Engine, coinbase common.Address, eth Backend, mux *event.TypeMux) *worker {
     worker := &worker{
-			  // TxPreEvent事件是TxPool发出的事件，代表一个新交易tx加入到了交易池中，这时候如果work空闲会将该笔交易收进work.txs，准备下一次打包进块
+        // TxPreEvent事件是TxPool发出的事件，代表一个新交易tx加入到了交易池中，这时候如果work空闲会将该笔交易收进work.txs，准备下一次打包进块
         txCh:           make(chan core.TxPreEvent, txChanSize),
-				// ChainHeadEvent事件，代表已经有一个块作为链头，此时work.update函数会监听到这个事件，则会继续挖新的区块
+        // ChainHeadEvent事件，代表已经有一个块作为链头，此时work.update函数会监听到这个事件，则会继续挖新的区块
         chainHeadCh:    make(chan core.ChainHeadEvent, chainHeadChanSize),
-				// ChainSideEvent事件，代表有一个新块作为链的旁支，会被放到possibleUncles数组中，可能称为叔块
+        // ChainSideEvent事件，代表有一个新块作为链的旁支，会被放到possibleUncles数组中，可能称为叔块
         chainSideCh:    make(chan core.ChainSideEvent, chainSideChanSize),
-				// 区块链数据库
+        // 区块链数据库
         chainDb:        eth.ChainDb(),
-				// 存放可能称为下一个块的叔块数组
+        // 存放可能称为下一个块的叔块数组
         possibleUncles: make(map[common.Hash]*types.Block),
-				// 返回一个数据结构，包括追踪当前未被确认的区块
+        // 返回一个数据结构，包括追踪当前未被确认的区块
         unconfirmed:    newUnconfirmedBlocks(eth.BlockChain(), miningLogAtDepth),
     }
     // 注册TxPreEvent事件到tx pool交易池
     worker.txSub = eth.TxPool().SubscribeTxPreEvent(worker.txCh)
     // 注册worker.chainHeadCh事件到blockchain
     worker.chainHeadSub = eth.BlockChain().SubscribeChainHeadEvent(worker.chainHeadCh)
-		// 注册worker.chainSideCh事件到
+    // 注册worker.chainSideCh事件到
     worker.chainSideSub = eth.BlockChain().SubscribeChainSideEvent(worker.chainSideCh)
     go worker.update()
 
@@ -391,10 +391,10 @@ func (ethash *Ethash) mine(block *Block, id int, seed uint64, abort chan struct{
         case <-abort:  
             ...; return  
         default:  
-						// 计算这个nonce的hash值
+            // 计算这个nonce的hash值
             digest, result := hashimotoFull(dataset, hash, nonce)
             if new(big.Int).SetBytes(result).Cmp(target) <= 0 {
-							  // 找到了合适的nonce值
+                // 找到了合适的nonce值
                 header = types.CopyHeader(header)  
                 header.Nonce = types.EncodeNonce(nonce)  
                 header.MixDigest = common.BytesToHash(digest)  
