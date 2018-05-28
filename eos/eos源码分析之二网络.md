@@ -1,4 +1,4 @@
-# eos源码分析之二网络
+﻿# eos源码分析之二网络
 </br>
 
 # 一、网络的初始化和启动
@@ -11,7 +11,7 @@ P2P网络是区块链的运行的基础模块，在EOS中，主要就是net_plug
 ``` c++
 net_plugin::net_plugin()
    :my( new net_plugin_impl ) {
-   my_impl = my.get();//此处写得不是太好，从智能指针又退化回到变通指针
+   my_impl = my.get();//此处写得不是太好，从智能指针又退化回到 普通指针
 }
 ```
 </br>
