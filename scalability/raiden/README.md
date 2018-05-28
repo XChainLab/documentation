@@ -1,14 +1,3 @@
-### 为什么使用 raiden-network 
-1. 小额高频交易
-2. 支持ERC20token交易
-
-### 基本架构
-雷电网络四个服务构成
-1. blochchain service : 用于和blockchain 交互， 例如获取 netting-channel-info, node的（host, port）等信息， 发送transaction(例如withdraw, close, deposit等), blockchain 主要由俩部分构成 eth_client（和链上交互的实体）、proxies(contract在本地的代理， 方便调用)、注册的filter以及相应的event msg 的 devoder
-2. raiden service : 转账操作的实体， 由俩部分构成 transport（目前是UDP）：发送线下交易的实体、NodeState：这部分包含 storage（记录routing gragh、balance proof、locked transfer、token networking）, handler例如 handler_direct_transfer（partner线下转账）, handler_new_balance（partner在contract新增一笔押金）, handler_block（blocknum增加了， locked_transfer 是否还安全否则需要关闭channel去体现了）等
-3. http service : 接受处理转账等http 请求
-4. alarm service: 不断的获取最新的blocknum后执行注册的callback list 
-
 ### 实现的原理
 1. 请先阅读 [What is the Raiden Network?](https://raiden.network/101.html)
 2. ##### 合约的类图
@@ -18,7 +7,31 @@
 
 </br>
 
-3. 交易的最简流程 
+### 为什么使用 raiden-network 
+1. 小额高频交易
+2. 支持ERC20token交易
+
+### 为什么需要channel 
+... 在通道内转账的direct_transfer或者利用通道转账的mediated_transfer质押的资金只能花费一次， 因为每笔资金只能流向一个方向， 就是通道内伙伴
+
+### 每次转账都增加 transfer_amount的好处
+..* 1 减小本地存储空间（只保存最后一笔操作即可）、降低了线上操作时的fee， 因为close、updateTransfer 等操作只需要最后一笔操作即可
+..* 2 防止重放攻击
+
+### 优化建议
+..* channel状态的可以支持使用双方签名的状态修改, 比如体现操作channel内的双反都签名后就直接转账、关闭通道即可了
+..* 注册在 endpoint 节点可以作为payment_network的种子节点用于其他来发现更多的节点， routing可以采用kademlia算法
+
+### 基本架构
+雷电网络四个服务构成
+1. blochchain service : 用于和blockchain 交互， 例如获取 netting-channel-info, node的（host, port）等信息， 发送transaction(例如withdraw, close, deposit等), blockchain 主要由俩部分构成 eth_client（和链上交互的实体）、proxies(contract在本地的代理， 方便调用)、注册的filter以及相应的event msg 的 devoder
+2. raiden service : 转账操作的实体， 由俩部分构成 transport（目前是UDP）：发送线下交易的实体、NodeState：这部分包含 storage（记录routing gragh、balance proof、locked transfer、token networking）, handler例如 handler_direct_transfer（partner线下转账）, handler_new_balance（partner在contract新增一笔押金）, handler_block（blocknum增加了， locked_transfer 是否还安全否则需要关闭channel去体现了）等
+3. http service : 接受处理转账等http 请求
+4. alarm service: 不断的获取最新的blocknum后执行注册的callback list 
+
+
+
+### 交易的最简流程 
 + sendTransaction(create netting channel)
 + 在alarmService处注册监听netting_channel 的事件的handler: poll_netting_channel_event， poll的具体步骤blockchain_service.eth_client.filter（from, to, netting_channel_address）)
 + sendTransaction(channel.deposit)
