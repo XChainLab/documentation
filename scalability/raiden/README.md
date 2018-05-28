@@ -19,8 +19,8 @@
 + 防止重放攻击
 
 ### 优化建议
-+ channel状态的可以支持使用双方签名的状态修改, 比如体现操作channel内的双反都签名后就直接转账、关闭通道即可了
-+ 注册在 endpoint 节点可以作为payment_network的种子节点用于其他来发现更多的节点， routing可以采用kademlia算法
++ channel状态的可以支持使用双方签名的状态修改操作, 比如提现操作channel内的双反都签名后就直接转账、关闭通道即可
++ 注册在 EndpointRegisty 节点可以作为p2p 的种子节点， 如此routing可以采用kademlia算法
 
 ### 基本架构
 雷电网络四个服务构成
