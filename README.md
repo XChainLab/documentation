@@ -14,6 +14,7 @@ XChainLab Documentation.
     - [精通比特币之六区块链](bitcoin/精通比特币之六区块链.md)
     - [精通比特币之五网络](bitcoin/精通比特币之五网络.md)
     - [钱包的功能类图和流程图](bitcoin/钱包的功能类图和流程图.md)
+    - [精通比特币之七挖矿和共识](bitcoin/精通比特币之七挖矿和共识.md)
 - 以太坊
 - [EOS]
    - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
