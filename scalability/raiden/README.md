@@ -11,7 +11,7 @@
 
 ### 实现的原理
 1. 请先阅读 [What is the Raiden Network?](https://raiden.network/101.html)
-2. ##### 合类图
+2. ##### 合约的类图
 </br>
 
 ![plugin-pic](imgs/smart_contract_obj.png)
@@ -27,7 +27,7 @@
 + curl httpserver.direct_transfer
 + httpserver调用raiden_service.direct_transfer  
 + transport.send
-+ raiden_service.handler_direct_transfer
++ 接收方raiden_service.handler_direct_transfer
 
 
 ### A给B的最大可转账金额
@@ -85,7 +85,7 @@ def get_distributable(sender, receiver): // sender的可转账资金
     
 ```
 
-### direct_transfer
+### direct transfer 的模拟过程
 ```python
 
 q = Queue()
@@ -143,9 +143,11 @@ def handler_direct_transfer(sender, msg):
     
 def create_balance_proof(value):  
     nonce = get_nonce()
+    transfered_amount = Store.get_transfer_amount(nodeId)
     locked_root = get_loocked_root()
     msg = encode(value, nonce, locked_root)
-    data = {"hash":hash(msg), "nonce":nonce, "amount":amount, "locked_root":locked_root, type:"direct_transfer"}}
+    data = {"hash":hash(msg), "nonce":nonce, "amount":transfered_amount+amount, "locked_root":locked_root, "type":"direct_transfer"}}
+    Store.set_transfer_amount(nodeId, transfered_amount+amount)
     return data
 
 sending()
