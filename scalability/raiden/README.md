@@ -3,7 +3,7 @@
 2. 支持ERC20token交易
 
 ### 基本架构
-... 雷电网络四个服务构成
+雷电网络四个服务构成
 1. blochchain service : 用于和blockchain 交互， 例如获取 netting-channel-info, node的（host, port）等信息， 发送transaction(例如withdraw, close, deposit等), blockchain 主要由俩部分构成 eth_client（和链上交互的实体）、proxies(contract在本地的代理， 方便调用)、注册的filter以及相应的event msg 的 devoder
 2. raiden service : 转账操作的实体， 由俩部分构成 transport（目前是UDP）：发送线下交易的实体、NodeState：这部分包含 storage（记录routing gragh、balance proof、locked transfer、token networking）, handler例如 handler_direct_transfer（partner线下转账）, handler_new_balance（partner在contract新增一笔押金）, handler_block（blocknum增加了， locked_transfer 是否还安全否则需要关闭channel去体现了）等
 3. http service : 接受处理转账等http 请求
@@ -36,6 +36,7 @@
 class Store:
     nodeId_to_transfer_amount = {}
     nodeId_to_balance = {}
+    
     @classmethod
     def set_transfer_amount(addr, transfer_amount):
          prefix = "transfer-amount:"  
@@ -43,11 +44,13 @@ class Store:
          party = nodeId_to_transfer_amount.get(key, None)
          if party:
               nodeId_to_transfer_amount[key] = balance
+    
     @classmethod          
     def get_transfer_amount(addr):
         prefix = "transfer-amount:"  
         key = "{}-{}".format(prefix, addr)
         return nodeId_to_transfer_amount.get(key, 0)
+    
     @classmethod    
     def get_deposit(addr):
         prefix = "balance:"
@@ -57,8 +60,21 @@ class Store:
     @classmethod
     def set_deposit(addr, value, blocknum):
         v = (value, blocknum)
+        prefix = "balance:"
         key = "{}-{}".format(prefix, addr)
         nodeId_to_balance[key] = v
+    
+    @classmethod
+    def get_endport(addr):
+        prefix = "endpoint:"
+        key = "{}{}".format(prefix, addr)
+        return endpoint.get(key, "")
+    
+    @classmethod
+    def set_endport(addr, host_port):
+        prefix = "endpoint:"
+        key = "{}{}".format(prefix, addr)
+        return endpoint.set(key, host_addr)
         
 def get_balance(sender, receiver): 
     return  sender的质押金额 - 转出去的金额 + 收到的金额
@@ -74,7 +90,7 @@ def get_distributable(sender, receiver): // sender的可转账资金
 
 q = Queue()
 not_stop = True
-transport = UdpServer
+transport = UdpServer(127.0.0.1, 33456)
 class UdpServer:
     def __init__(self):
          self._server = DatagramServer(host, port, self.receive)
@@ -86,27 +102,31 @@ class UdpServer:
               pass
          elif msg["type"] = "direct_transfer":
               handle_direct_transfer(msg)
+    def send(self, msg, receiver):
+         self._server.sentTo(msg, receiver)  
      
 def sending(blocking=True)
     def runner():
         while not_stop:
-            msg = q.peek(blocking):
-            if msg:
-                signed_msg = sign(msg)
-                self._server.send(signed_msg)
+            pair = q.peek(blocking):
+            if pair:
+                signed_msg = sign(pair[0])
+                transport.send(signed_msg, pair[1])
                 q.get()
             else:
                 sleep()
     run_at_new_thread(runner)
 
-def send_msg(msg):
+def async_send_msg(msg):
     q.put(msg)
 
 def transfer_direct(amount, receiver):
    available_amount = get_distributable(nodeId, receiver)
    if available_amount >= amount:
        msg = create_balance_proof(value)
-       send_msg(msg)
+       host_port = Store.get_endport(receiver, "")
+       if host_port:
+           async_send_msg((msg, host_port))
        return "ok"
    return "found not not available"   
    
