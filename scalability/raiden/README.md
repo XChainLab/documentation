@@ -15,12 +15,12 @@
 ... 在通道内转账的direct_transfer或者利用通道转账的mediated_transfer质押的资金只能花费一次， 因为每笔资金只能流向一个方向， 就是通道内伙伴
 
 ### 每次转账都增加 transfer_amount的好处
-..* 1 减小本地存储空间（只保存最后一笔操作即可）、降低了线上操作时的fee， 因为close、updateTransfer 等操作只需要最后一笔操作即可
-..* 2 防止重放攻击
++ 减小本地存储空间（只保存最后一笔操作即可）、降低了线上操作时的fee， 因为close、updateTransfer 等操作只需要最后一笔操作即可
++ 防止重放攻击
 
 ### 优化建议
-..* channel状态的可以支持使用双方签名的状态修改, 比如体现操作channel内的双反都签名后就直接转账、关闭通道即可了
-..* 注册在 endpoint 节点可以作为payment_network的种子节点用于其他来发现更多的节点， routing可以采用kademlia算法
++ channel状态的可以支持使用双方签名的状态修改, 比如体现操作channel内的双反都签名后就直接转账、关闭通道即可了
++ 注册在 endpoint 节点可以作为payment_network的种子节点用于其他来发现更多的节点， routing可以采用kademlia算法
 
 ### 基本架构
 雷电网络四个服务构成
