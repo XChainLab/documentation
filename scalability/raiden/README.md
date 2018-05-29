@@ -1,3 +1,44 @@
+**_先给出大白话的总结_** ： 试想ABCD四个小伙伴做游戏，游戏中有一步是资金转账， 最一开始他们都知道其他人的可用资金， 为了方便也出于信任的原因， 他们之间的转账都通过打白条的方式， 白条也是可用的资金， 比如A给B打了个10元的白条， 那么A就知道B比刚才多了10元， B若要给A转账的话， A处认可的B的可用资金会比开始时多了10元，但是这就造成了几个潜在的问题， 1：随着时间的推移小伙伴之间无法准确的知道对方的剩余可用资金， 因为资金流向是多方向的， 2：这些白条怎么兑现，无论对方对方承认与否的情况下怎么兑现， 3：有人造假怎么办
+针对1： 让资金单向流动， 我们规定所有的小伙伴之间俩俩配对， （A,B）（B,C）(C,D)就是一种可能的组合， 转账只能在配对的组合内或者通过对内的小伙伴转给外部小伙伴， 这样就保证了， 小伙伴的剩余可用资金对于对内的伙伴永远是可查的， 但是这也带来了一个问题跨对转账怎么完成例如A给D转账， 解决方案是我们规定（A，B）是一条边， 那么A需要找到一条A到D的通路， 转账就发生在这条通路上，所以此时A知道 A->B ->C ->D 是一条通路， 另外我们也规定这样的路上的转账的资金必须被锁定（意思是组内收到白条的一方的可用资金不会增加，打白条的一方的可用资金会减少）， 那么A就给B打个锁定资金的白条， 白条是有附带信息“知道了secret才能解锁资金, 计算方法是hash(secret, lockhash')==locksroot， 其中lockhash'是上一笔该小组内的处于锁定状态白条的的lockhash ”才能生效， B也照此给D打个白条， C同样如此给D打白条， D收到白条后告诉A， 他收到白条了， 那么此时A就把这笔解锁这笔资金的secret告诉D， 但是此时资金还是处于锁定状态，D的可用资金没有增加（是否增加取决组内的C是否承认）， 如果强制解锁资金的话友谊的小船会翻的， 那么他会立刻告诉C他收到了secret， C就会重新打个条子并添加额外的信息“为友谊的小窗不翻，这个白条是用来抵消刚才的锁定的那笔资金， 同时也表示那笔处于锁定状态的白条无效了”， 如此重复直到A处 ， 细心的同学可能发现B出现在俩个组内就意味B的可用资金double了， 事情肯定不这么简单， 我们规定这种情况下B的资金必须拆分为俩分。
+针对2： 我们强制规定1： 必须和其他小伙伴组队， 2：组队的同时必须交一笔押金， 所以 可用资金就 == 押金，3:增加一个裁判的角色，押金交到裁判这里， 裁判负责仲裁
+针对3： 每个白条必须有自己签名， 裁判只认签名然后按规矩办事
+
+普通白条的定义 ：
+
+```python
+{ 
+    transfer_amount, //（总计转出去了多少钱， 注意不是现在要转多少）, 
+    nonce,//（第几次转账），
+    locksroot,//(处于锁定状态的资金有哪些)， 
+    signature, 
+    hash(transfer_amount, nonce, locksroot),
+}
+```
+
+这么定义的好处
+..* transfer_amount 1：接收方只需要保存最后一个白条即可， 2： 防止重放攻击，裁判只给你判决一次（所以你只会拿着最后一张白条去提现）
+..* locked_transfer：1: 防止通道上锁定资金在收到普通的白条后强制解锁资金， 因为解锁锁定白条的的白条会删了锁定的那个条子
+
+锁定资金的白条 
+
+```python
+{
+    amount(本次要锁定的资金, locksroot, signature, nonce, hash)} //其中locksroot = hash(locksroot‘, nonce, secret), locksroot‘ 表示上一笔锁定的锁定资金白条中的 
+    nonce,
+    hash(amount, nonce, locksroot),
+    locksroot, //找裁判兑现这个白条必须要知道secret才可以
+    signature,
+}
+    
+具体的操作
+1： 怎么提现？
+... 组内成员每人一次提交普通白条的机会， 提交锁定白条的次数不受限制， 但是你得按照 merkel proof姿势去解锁每一笔锁定的白条
+2： 怎么找到小伙伴？
+... 可以随机加入， 可以自由组合， 但是一旦组成立了， 游戏内的其他小伙伴会发来贺电， 因为他们可能会借用你们的通道
+3： 有什么瓶颈， 怎么解决?
+... 跨组转账的话， 你得借用别人的资金池， 所以找到一条合适的通道就需要俩个条件  1：有一条可到达的路， 2： 路上的小伙伴之间的认可可用资金小于你们转的资金数目， 这会造成热点故障， 若进一步造成恶化的话， 就会脑裂，原因是1： 本来加入多个组的话资金就会分散， 没有多少人愿意这么干， 但是先要找到这样的通路， 必须得有人自愿加入多个组， 2: 处于锁定状态的资金是不会被对方承认的， 所以找通路的时候可能路是通了， 但是路上某个组的资金被抽干了， 路就变的不同了， 解决办法给自愿付出的小伙伴一定的手续费
+
+
 ### 实现的原理
 1. 请先阅读 [What is the Raiden Network?](https://raiden.network/101.html)
 2. ##### 合约的类图
@@ -7,16 +48,9 @@
 
 </br>
 
-### 为什么使用 raiden-network 
-1. 小额高频交易
-2. 支持ERC20token交易
-
 ### 为什么需要channel 
 ... 在通道内转账的direct_transfer或者利用通道转账的mediated_transfer质押的资金只能花费一次， 因为每笔资金只能流向一个方向， 就是通道内伙伴
 
-### 每次转账都增加 transfer_amount的好处
-+ 减小本地存储空间（只保存最后一笔操作即可）、降低了线上操作时的fee， 因为close、updateTransfer 等操作只需要最后一笔操作即可
-+ 防止重放攻击
 
 ### 优化建议
 + channel状态的可以支持使用双方签名的状态修改操作, 比如提现操作channel内的双反都签名后就直接转账、关闭通道即可
@@ -51,7 +85,7 @@ class Store:
     nodeId_to_balance = {}
     
     @classmethod
-    def set_transfer_amount(addr, transfer_amount):
+    def set_transfer_amount(cls, addr, transfer_amount):
          prefix = "transfer-amount:"  
          key = "{}-{}".format(prefix, addr)
          party = nodeId_to_transfer_amount.get(key, None)
@@ -59,26 +93,26 @@ class Store:
               nodeId_to_transfer_amount[key] = balance
     
     @classmethod          
-    def get_transfer_amount(addr):
+    def get_transfer_amount(cls, addr):
         prefix = "transfer-amount:"  
         key = "{}-{}".format(prefix, addr)
         return nodeId_to_transfer_amount.get(key, 0)
     
     @classmethod    
-    def get_deposit(addr):
+    def get_deposit(cls, addr):
         prefix = "balance:"
         key = "{}-{}".format(prefix, addr)
         return nodeId_to_balance.get(key, ())
         
     @classmethod
-    def set_deposit(addr, value, blocknum):
+    def set_deposit(cls, addr, value, blocknum):
         v = (value, blocknum)
         prefix = "balance:"
         key = "{}-{}".format(prefix, addr)
         nodeId_to_balance[key] = v
     
     @classmethod
-    def get_endport(addr):
+    def get_endport(cls, addr):
         prefix = "endpoint:"
         key = "{}{}".format(prefix, addr)
         return endpoint.get(key, "")
@@ -106,8 +140,8 @@ not_stop = True
 transport = UdpServer(127.0.0.1, 33456)
 class UdpServer:
     def __init__(self):
-         self._server = DatagramServer(host, port, self.receive)
-    def receive(self, data, host):
+         self._server = DatagramServer(host, port, self._receive)
+    def _receive(self, data, host):
          msg = decode(data)
          if msg["type"] = "ping":
               pass
