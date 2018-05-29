@@ -139,10 +139,10 @@ return executeCreate(_sender, _endowment, _gasPrice, _gas, _init, _origin);
 ```
 下面看关键的的函数executeCreate,其流程图如下所示:</br>
 ![ExecutiveCeateFlowChart](./image/ExecutiveCreateFlowChart.jpg "ExecutiveCreateFlowChart")</br>
-我们从代码中不难看出，最后和call函数相同生成ExtVM对象，将要执行的字节码放入其中。这里需要注意的是执行transferBalance时候如果没有账户将创建一个新的账户。</br>
+我们从代码中不难看出，最后和call函数相同生成ExtVM对象，将要执行的字节码放入其中。</br>这里需要注意的是执行transferBalance时候如果没有账户将创建一个新的账户。</br>
 **合约执行调用**</br>
 合约的执行的起始点在函数Executive::go中，函数的流程图如下：</br>
-![ExecutiveGoFlowChart](./image/ExecutiveGoFlowChart.jpg "ExecutiveGoFlowChart")</br>
+![ExecutiveGoFlowChart](./image/ExecutiveGoFlowchart.jpg "ExecutiveGoFlowChart")</br>
 从流程图中我们看到如果m_ext（create或者call函数中创建）不为空的时候通过工厂方法创建VM，</br>这里要正确的理解m_ext和vm的区别，我们先看工厂方法的实现:</br>
 ```
 std::unique_ptr<VMFace> VMFactory::create(VMKind _kind)
@@ -173,7 +173,7 @@ std::unique_ptr<VMFace> VMFactory::create(VMKind _kind)
 // trampoline to minimize depth of call stack when calling out
 m_bounce = &LegacyVM::initEntry;//初始化m_bounce
 do
-	(this->*m_bounce)();
+    (this->*m_bounce)();
 while (m_bounce);
 ```
 初始化m_bounce的函数使initEntry,我们看下initEntry函数中实现的功能。</br>
@@ -199,19 +199,18 @@ static const std::map<Instruction,  InstructionInfo> c_instructionInfo =
 ```
 void LegacyVM::interpretCases()
 {
-	INIT_CASES
-	DO_CASES
-	{
-		CASE(CREATE2)
-		{
-			ON_OP();
-			if (!m_schedule->haveCreate2)
-				throwBadInstruction();
-
-			m_bounce = &LegacyVM::caseCreate;
+  INIT_CASES
+  DO_CASES
+  {
+    CASE(CREATE2)
+    {
+      ON_OP();
+      if (!m_schedule->haveCreate2)
+          throwBadInstruction();
+          m_bounce = &LegacyVM::caseCreate;
 		}
 		BREAK
-		CASE(CREATE)
+    CASE(CREATE)
     ........
     此处省略很多的case
     .......
@@ -219,12 +218,13 @@ void LegacyVM::interpretCases()
     NEXT
 
     CASE(INVALID)
-		DEFAULT
-		{
-			throwBadInstruction();
-		}
-	}
-	WHILE_CASES
+    DEFAULT
+    {
+        throwBadInstruction();
+    }
+	}  
+  WHILE_CASES
+}
 ```
 上述代码中对应了很多宏，，如果不对宏进行展开，直观理解就是对每种操作执行对应的函数，并将</br>结果进行中间存储，EVM中定义了相关宏开关，其中一些宏开关，都对应了上述代码中不同的</br>宏展开,同时对应了不同的代码组织形式。参见文件VMConfing.h,如下代码为相关的宏开关：</br>
 ```
@@ -370,8 +370,8 @@ m_runGas = toInt63(
 m_newMemSize = m_mem.size();
 m_copyMemSize = 0;
 ```
-下面我们看程序是如何利用跳表和onOpearion来完成程序的执行，下面我们以ADD操作为例来进行</br>说明，在进行ADD说明前，先简单介绍一下EVM中栈工作的原理，例如如果我们要执行一</br>
-加法操作，则通常表示为c = a + b，把它翻译成EVM中栈的操作序列伪操作码序列如下：</br>
+下面我们看程序是如何利用跳表和onOpearion来完成程序的执行，下面我们以ADD操作</br>为例来进行说明，在进行ADD说明前，先简单介绍一下EVM中栈工作的原理，例如如果我</br>们要执行一
+加法操作，则通常表示为c = a + b，把它翻译成EVM中栈的操作序列伪操作码</br>序列如下：</br>
 ```
 push a into stack
 push b into stack
@@ -393,13 +393,13 @@ push a+b into stack
 		CASE(PUSH31)
 		CASE(PUSH32)
 		{
-			ON_OP();
-			updateIOGas();
-			int numBytes = (int)m_OP - (int)Instruction::PUSH1 + 1;
-			m_SPP[0] = 0;
-			for (++m_PC; numBytes--; ++m_PC)
-        //这里主要是处理256位宽的的情况
-				m_SPP[0] = (m_SPP[0] << 8) | m_code[m_PC];
+      ON_OP();
+      updateIOGas();
+      int numBytes = (int)m_OP - (int)Instruction::PUSH1 + 1;
+      m_SPP[0] = 0;
+      for (++m_PC; numBytes--; ++m_PC)
+      //这里主要是处理256位宽的的情况
+      m_SPP[0] = (m_SPP[0] << 8) | m_code[m_PC];
 		}
 		CONTINUE
 `````
@@ -415,14 +415,14 @@ EVM中对PUSH1的其他操作均采用上面的代码，PUSH3的含义是将三�
 通过执行完PUSH操作后，栈上的已经放好了我们要做加法的数据，现在我们看一下ADD操作是如何</br>的。如下为ADD操作的代码片段：</br>
 ```
 CASE(ADD)
-		{
-			ON_OP();
-			updateIOGas();
+{
+  ON_OP();
+  updateIOGas();
 
-			//pops two items and pushes their sum mod 2^256.
-			m_SPP[0] = m_SP[0] + m_SP[1];
-		}
-		NEXT
+  //pops two items and pushes their sum mod 2^256.
+  m_SPP[0] = m_SP[0] + m_SP[1];
+}
+NEXT
 ```
 上面的代码通过宏展开后代码如下：</br>
 ```
@@ -439,9 +439,9 @@ goto* jumpTable[(int)m_OP];
 现在step by step的看一下这部分是如何进行处理，首先是opOperaion函数，如下为onOperation</br>函数的实现：</br>
 ```
 if (m_onOp)
-		(m_onOp)(++m_nSteps, m_PC, m_OP,
-			m_newMemSize > m_mem.size() ? (m_newMemSize - m_mem.size()) / 32 : uint64_t(0),
-			m_runGas, m_io_gas, this, m_ext);
+  (m_onOp)(++m_nSteps, m_PC, m_OP,
+  m_newMemSize > m_mem.size() ? (m_newMemSize - m_mem.size()) / 32 : uint64_t(0),
+  m_runGas, m_io_gas, this, m_ext);
 ```
 代码中的m_onOp为提供的回调函数，其中其中m_onOp的类型为OnOpFunc,声明如下如下所示：</br>
 ```
@@ -454,40 +454,38 @@ using OnOpFunc = std::function<void(uint64_t /*steps*/,
                                     VMFace const*,
                                     ExtVMFace const*)>;
 ```
-函数设主要是在虚拟执行的时候提供一个可以回调的接口，方便进行处理，比如做最简单的tracing</br>
+函数设计主要是在虚拟执行的时候提供一个可以回调的接口，方便进行处理，比如做最简单的tracing</br>
 接下来执行函数updateIOGas(),该函数功能主要是查看目前的gas消耗是否已经大于提供的gas,</br>如果大于，则抛出异常，虚拟机停止运行。代码片段如下：</br>
 ```
 if (m_io_gas < m_runGas)
-		throwOutOfGas();
+  throwOutOfGas();
 m_io_gas -= m_runGas;
 ```
 注意函数中的m_runGas在函数updateGas中被修改，会根据内存的使用来进行计算和消耗。
-记下来执行的代码为`m_SPP[0] = m_SP[0] + m_SP[1];`主要功能是完成两个数的相加</br>
-计算结果会存储在m_SPP[0]中，m_SPP的含义是“指向下一个栈中可用的位置”，这里指向m_SP[0]</br>运行初始化开始时m_SPP = m_SP。
-
+接下来执</br>行的代码为`m_SPP[0] = m_SP[0] + m_SP[1];`主要功能是完成两个数的相加计算结果会存储在m_SPP[0]</br>中，m_SPP的含义是“指向下一个栈中可用的位置”，这里指向m_SP[0]运行初始化开始时m_SPP = m_SP。</br>
 接着执行`++m_PC`,这里将指向代码字节流中的下一个操作。接着执行数fetchInstruction(),
-这个时候</br>变量m_OP中存储的是新的操作，继续执行goto* jumpTable[(int)m_OP]，这个时候将跳到下一个操作的lab去执行。</br>
+这个时候</br>变量m_OP中存储的是新的操作，继续执行goto* jumpTable[(int)m_OP]，这个时候将跳到下一个操作的</br>label去执行。
 综上，EVM虚拟机就是借助栈和基本的操作来完成一个合约字节流的运行的。</br>
 **执行后的结果返回**</br>
 在操作序列的RETURN和REVERT操作，将栈上的结果数据拷贝到内存中去。以下为RETURN部分代码/br>
 ```
 CASE(RETURN)
 {
-		ON_OP();
-		m_copyMemSize = 0;
-		updateMem(memNeed(m_SP[0], m_SP[1]));
-		updateIOGas();
+  ON_OP();
+  m_copyMemSize = 0;
+  updateMem(memNeed(m_SP[0], m_SP[1]));
+  updateIOGas();
 
-		uint64_t b = (uint64_t)m_SP[0];
-		uint64_t s = (uint64_t)m_SP[1];
-    //m_output中存储的就是最后返回的结果
-		m_output = owning_bytes_ref{std::move(m_mem), b, s};
-		m_bounce = 0;
-	}
+  uint64_t b = (uint64_t)m_SP[0];
+  uint64_t s = (uint64_t)m_SP[1];
+  //m_output中存储的就是最后返回的结果
+  m_output = owning_bytes_ref{std::move(m_mem), b, s};
+  m_bounce = 0;
+}
 BREAK
 ```
 **运行过程中的Gas的消费**</br>
-上面描述ADD和所涉及到的PUSH操作的时候我们就已经看到会调用updateIOGas函数来计算gas</br>的消费。从代码中我们可以看到其中不消耗Gas操作有下面这些：</br>
+上面描述ADD和所涉及到的PUSH操作的时候我们就已经看到会调用updateIOGas函数来计算gas</br>的消费。从代码中我们可以看到不同的操作对应不同的gas消费具体如下：</br>
 
 
  no gas | IO gas 1| IO gas 2  | mem gas
@@ -531,7 +529,7 @@ PUTLOCAL|BYTE|SHL|
 其中**SSTORE**是一条比较特殊的指令，他将消耗stack存储的gas</br>
 
 ###小结
-EVM如果精确的定位应该是一个基于栈的自定义字节码解释器，实现上并不复杂，代码过程中遇到</br>的主要问题有以下几点：</br>
+EVM如果精确的定位应该是一个基于栈的自定义字节码解释器，实现上并不复杂，代码</br>过程中遇到的主要问题有以下几点：</br>
 * 字节宽度的设计，目前看主要是出于实现难度和实际需求（如SHA3的操作)。
 * 设计上每次都会生成新的VM对象，出于安全和目前需求这样的设计和实现是可以接受的，数据</br>共享和多线程处理在智能合约的层面目前还不需要。
 * EVM整体上实现了基本的操作，但是还需要和语言编译器去结合来做具体的优化，JIT是一个</br>方向。
