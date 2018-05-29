@@ -7,7 +7,7 @@
 
 ```python
 { 
-    transfer_amount, //（总计转出去了多少钱， 注意不是现在要转多少）, 
+    transfer_amount + n, //（总计转出去了多少钱+现在转多少， 注意不是现在要转多少）, 
     nonce,//（第几次转账），
     locksroot,//(处于锁定状态的资金有哪些)， 
     signature, 
@@ -17,16 +17,17 @@
 
 **这么定义的好处**
 1. transfer_amount 1：接收方只需要保存最后一个白条即可， 2： 防止重放攻击，裁判只给你判决一次（所以你只会拿着最后一张白条去提现）
-2. locked_transfer：1: 防止通道上锁定资金在收到普通的白条后强制解锁资金， 因为解锁锁定白条的的白条会删了锁定的那个条子
+2. locksroot：1: 防止通道上锁定资金在收到普通的白条后强制解锁资金， 因为解锁白条会将锁定白条设置无效， 具体操作就是在打条子的时候把locksroot设置为锁定白条中的locksroot‘, 如此对方是没有机会提现该笔被解锁的资金，因为merkel tree 不包含它了
 
 **锁定资金的白条**
 
 ```python
 {
-    amount， //本次要锁定的资金 
+    transfer_amount， // 总计转出去了多少钱, 不是现在转多少
     nonce,
+    expiry, // 过期时间，小于某个blocknum之前这个白条有限  
     hash(amount, nonce, locksroot'), 
-    locksroot, // locksroot = hash(locksroot‘, nonce, secret), locksroot‘ 表示上一笔锁定的锁定资金白条中的,找裁判兑现这个白条必须要知道secret才可以
+    locksroot, // locksroot = hash(locksroot‘, secret， expiry， n(现在要转多少)), locksroot‘ 表示上一笔锁定的锁定资金白条中的,找裁判兑现这个白条必须要知道secret才可以
     signature,
 }
 ```
@@ -40,6 +41,9 @@ _可以随机加入， 可以自由组合， 但是一旦组成立了， 游戏�
 _跨组转账的话， 你得通过别人的通道并且借用别人的资金池， 所以找到一条合适的通道就需要俩个条件  1：有一条可到达的路， 2： 路上的小伙伴之间的认可可用资金大于你要转的资金， 这会造成热点故障，原因是1： 本来加入多个组的话资金就会分散， 没有多少人愿意这么干， 但是先要找到这样的通路， 必须得有人自愿加入多个组， 2: 处于锁定状态的资金是不会被对方承认的，热点节点的资金压力大， 3：流量压力； 解决办法给愿意承担桥接转账的节点一定的手续费
 4. **为何要锁定资金?**
 _因为跨组转账的不确定因素太多， 可能中途发现没有通路了， 可能有节点作恶、它收到中间转账但是不往下传，将转账资金锁定就确保了在target节点没有确认到帐前中间转账过程中资金不会丢失， 不好影响也是很显然的，就是造成别的节点的资金压力和流量压力_
+5. **不能一直等待**
+_因为网络或者其他原因，不能让locked的白条一直占用资金，所以在在打locked白条的时候价格过期时间，大于某个blocknum后这个条子就没有用了， 所以在类似A给D转账的时候B给C的locked白条必须小于A给B的， 如此类推。 
+
 
 ### 实现的原理
 1. 请先阅读 [What is the Raiden Network?](https://raiden.network/101.html)
@@ -116,7 +120,7 @@ class Store:
         return endpoint.get(key, "")
     
     @classmethod
-    def set_endport(addr, host_port):
+    def set_endport(cls, addr, host_port):
         prefix = "endpoint:"
         key = "{}{}".format(prefix, addr)
         return endpoint.set(key, host_addr)
