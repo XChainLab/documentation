@@ -56,7 +56,7 @@ _因为跨组转账的不确定因素太多， 可能中途发现没有通路了
 
 ### 基本架构
 雷电网络四个服务构成
-1. blochchain service : 用于和blockchain 交互， 例如获取 netting-channel-info, node的（host, port）等信息， 发送transaction(例如withdraw, close, deposit等), blockchain 主要由俩部分构成 eth_client（和链上交互的实体）、proxies(contract在本地的代理， 方便调用)、注册的filter以及相应的event msg 的 devoder
+1. blochchain service : 用于和blockchain 交互， 例如获取 netting-channel-info, node的（host, port）等信息， 发送transaction(例如withdraw, close, deposit等), blockchain 主要由四部分构成 eth_client（和链上交互的实体）、proxies(contract在本地的代理， 方便调用)、注册的filter以及相应的event msg 的 decoder
 2. raiden service : 转账操作的实体， 由俩部分构成 transport（目前是UDP）：发送线下交易的实体、NodeState：这部分包含 storage（记录routing gragh、balance proof、locked transfer、token networking）, handler例如 handler_direct_transfer（partner线下转账）, handler_new_balance（partner在contract新增一笔押金）, handler_block（blocknum增加了， locked_transfer 是否还安全否则需要关闭channel去体现了）等
 3. http service : 接受处理转账等http 请求
 4. alarm service: 不断的获取最新的blocknum后执行注册的callback list 
