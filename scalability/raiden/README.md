@@ -23,10 +23,10 @@
 
 ```python
 {
-    amount(本次要锁定的资金, locksroot, signature, nonce, hash)} //其中locksroot = hash(locksroot‘, nonce, secret), locksroot‘ 表示上一笔锁定的锁定资金白条中的 
+    amount， //本次要锁定的资金 
     nonce,
-    hash(amount, nonce, locksroot),
-    locksroot, //找裁判兑现这个白条必须要知道secret才可以
+    hash(amount, nonce, locksroot'), 
+    locksroot, // locksroot = hash(locksroot‘, nonce, secret), locksroot‘ 表示上一笔锁定的锁定资金白条中的,找裁判兑现这个白条必须要知道secret才可以
     signature,
 }
 ```
