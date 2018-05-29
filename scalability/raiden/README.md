@@ -25,7 +25,7 @@
 {
     transfer_amount， // 总计转出去了多少钱, 不是现在转多少
     nonce,
-    expiry, // 过期时间，小于某个blocknum之前这个白条有限  
+    expiry, // 过期时间，小于某个blocknum之前这个白条有效
     hash(amount, nonce, locksroot'), 
     locksroot, // locksroot = hash(locksroot‘, secret， expiry， n(现在要转多少)), locksroot‘ 表示上一笔锁定的锁定资金白条中的,找裁判兑现这个白条必须要知道secret才可以
     signature,
@@ -130,7 +130,7 @@ def get_balance(sender, receiver):
 def get_amount_locked(end_state):
     return 所有解锁了的锁定金额 + 所有锁定的金额    
 def get_distributable(sender, receiver): // sender的可转账资金
-    return get_balance(sender, receiver) - get_amount_locked(sender)
+    return get_balance(sender, receiver) - get_amount_locked(sender)  // 锁定的不能花， 解锁的已经花了
     
 ```
 
