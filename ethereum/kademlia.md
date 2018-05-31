@@ -2,7 +2,7 @@
 
 prefix位长 | 可能的取值数目 | 异或结果范围 
 ------ | ------ | ------ 
- 8 | pow(2,0) | 0 
+ 8 | 0 | 0 
  7 | pow(2,0) | 1 
  6 | pow(2,1) | [2, 3]   
  5 | pow(2,2) | [4, 7] 
@@ -22,28 +22,26 @@ prefix位长 | 可能的取值数目 | 异或结果范围
 算法实现如下(golang版)
 
 ```python
-func distanceInByte(x uint8) uint {
+func prefixLength(xor uint8) uint {
 	switch {
-	case x == 0:
-		return 8
-	case x == 1:
+	case xor == 1:
 		return 7
-	case x >= 2 && x <= 3:
+	case xor >= 2 && xor <= 3:
 		return 6
-	case x >= 4 && x <= 7:
+	case xor >= 4 && xor <= 7:
 		return 5
-	case x >= 8 && x <= 15:
+	case xor >= 8 && xor <= 15:
 		return 4
-	case x >= 16 && x <= 31:
+	case xor >= 16 && xor <= 31:
 		return 3
-	case x >= 32 && x <= 63:
+	case xor >= 32 && xor <= 63:
 		return 2
-	case x >= 64 && x <= 127:
+	case xor >= 64 && xor <= 127:
 		return 1
-	case x >= 128 && x <= 255:
+	case xor >= 128 && xor <= 255:
 		return 0
 	}
-	return 0
+	return 8
 }
 
 func calcDistance(a, b []byte) uint {
@@ -53,7 +51,7 @@ func calcDistance(a, b []byte) uint {
 		if x == 0 {
 			c += 8
 		} else {
-			c += distanceInByte(x)
+			c += prefixLength(x)
 			break
 		}
 	}
@@ -176,12 +174,12 @@ func distcmp(target, a, b Topic) int {
 	return 0
 }
 
-type distance struct {
+type disCalactor struct {
 	entries []*Node
 	target  Topic
 }
 
-func (d *distance) push(n *Node, maxElems int) {
+func (d *disCalactor) push(n *Node, maxElems int) {
 	ix := sort.Search(len(d.entries), func(i int) bool {
 		return distcmp(d.target, d.entries[i].topic, n.topic) > 0
 	})
