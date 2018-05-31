@@ -130,35 +130,7 @@ func (e *entry) add(t Topic, weight uint, data []byte) {
 }
 
 func (e *entry) gc() {
-	if e.nodes.Len() < NodesLengthPerEntry {
-		return
-	}
-	if e.lastGCTime.Add(EntryGCInterval).Before(time.Now()) {
-		return
-	}
-	e.lastGCTime = time.Now()
-	nodes := new(Nodes)
-	for _, t := range *(e.nodes) {
-		if t.lastUsed.Add(TopicMaxIdleTime).Before(time.Now()) {
-			continue
-		}
-		heap.Push(nodes, t)
-	}
-	copy((*e.nodes)[:], (*nodes)[:])
-	nodes = new(Nodes)
-	if e.nodes.Len() < NodesLengthPerEntry {
-		for _, t := range *(e.replacementes) {
-			if t.lastUsed.Add(TopicMaxIdleTime).Before(time.Now()) {
-				continue
-			}
-			if e.nodes.Len() < NodesLengthPerEntry {
-				heap.Push(e.nodes, t)
-				continue
-			}
-			heap.Push(nodes, t)
-		}
-		e.replacementes = nodes
-	}
+	// 需要删除太老的节点信息了
 }
 
 func distcmp(target, a, b Topic) int {
