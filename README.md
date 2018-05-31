@@ -25,6 +25,7 @@ XChainLab Documentation.
 - 共识机制
     - [raft](http://thesecretlivesofdata.com/raft/)
     - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
+    - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
 - 虚拟机
 - 密码学
 - [相关文章翻译](translate/translate-readme.md)
