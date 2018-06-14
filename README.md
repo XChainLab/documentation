@@ -32,7 +32,7 @@ XChainLab Documentation.
 - 虚拟机
 - 密码学
 - 测试相关
-- [主流区块链特点](testDoc/链调研的表.xlsx)
+    - [主流区块链特点](testDoc/链调研的表.xlsx)
 - [相关文章翻译](translate/translate-readme.md)
     - [学习使用IPFS在区块链上安全分享文件](translate/IPFS/learn-to-securely-share-files-on-the-blockchain-with-IPFS.md)
     - [共识算法漫游指南](translate/consensus/A_Hitchhiker's_Guide_to_Consensus_Algorithms.md)
