@@ -16,7 +16,7 @@
 + _消息broker订阅EventRoundStep、EventVote、 EventProposalHeartbeat， 其处理都是将相应的消息广播给远程节点， 用以维护本地节点在远程的镜像， 以维持消息同步_
 
 3. 通过scheduleTimeout来简化投票超时的实现过程， 算法实现如下
-```python
+```raw
 type timeoutInfo struct {
     Duration time.Duration         `json:"duration"`
     Height   int64                 `json:"height"`
@@ -77,7 +77,7 @@ func handleTimeout(t timeoutInfo){
 ```
 
 4. 通过状态机转换来简化投票过程， 主要三个状态是proposal、prevote、precommit、以及主要状态各自对应的wait状态、另外在加开始的俩个状态NewHeight、NewRound以及结束的commit状态共计九个状态， 状态转换图如下
-```python
+```raw
 
                                 +-------------------------------------+
                                 v                                     |(Wait til `CommmitTime+timeoutCommit`)
@@ -104,7 +104,7 @@ func handleTimeout(t timeoutInfo){
 5. 通过wal机制保证断点恢复， 状态转换前先write转换参数， 恢复时只需逐层load转换参数即可。
 
 6. 惩罚BFT节点的算法
-```python
+```raw
   1. 开始Block高度为H的投票
   2. 本地节点收到节点A的投票，将投票加入本地VoteSet集合 
   3. 收到节点B发来节点A的投票， 该投票与本地VoteSet中的投票冲突
