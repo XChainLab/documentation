@@ -33,10 +33,10 @@ func (self timeoutInfo)newer(other timeoutInfo)bool{
     if self.Height < other.Height {
          return false
     } else if newti.Height == ti.Height {
-        if newti.Round < ti.Round {
+        if self.Round < other.Round {
         	return false
-        } else if newti.Round == ti.Round {
-            if ti.Step > 0 && newti.Step <= ti.Step {
+        } else if self.Round == other.Round {
+            if self.Step > 0 && self.Step <= other.Step {
                 return false
             }
         }
@@ -48,7 +48,7 @@ func timeoutRoutine() {
     for {
         select {
         case newti := <-tickChan:
-            if newti.newer(ti){
+            if ！newti.newer(ti){
                 continue
             }
             timer.Stop()
@@ -76,7 +76,30 @@ func handleTimeout(t timeoutInfo){
 }
 ```
 
-4. 通过状态机转换来简化投票过程， 主要三个状态是proposal、prevote、precommit、以及主要状态各自对应的wait状态、另外在家开始的俩个状态NewHeight、NewRound以及结束的commit状态攻击九个状态， 状态转换通过超时、获得超过2/3投票来过渡。
+4. 通过状态机转换来简化投票过程， 主要三个状态是proposal、prevote、precommit、以及主要状态各自对应的wait状态、另外在加开始的俩个状态NewHeight、NewRound以及结束的commit状态共计九个状态， 状态转换图如下
+```python
+
+                                +-------------------------------------+
+                                v                                     |(Wait til `CommmitTime+timeoutCommit`)
+                          +-----------+                         +-----+-----+
+             +----------> |  Propose  +--------------+          | NewHeight |
+             |            +-----------+              |          +-----------+
+             |                                       |                ^
+             |(Else, after timeoutPrecommit)         v                |
+       +-----+-----+                           +-----------+          |
+       | Precommit |  <------------------------+  Prevote  |          |
+       +-----+-----+                           +-----------+          |
+             |(When +2/3 Precommits for block found)                  |
+             v                                                        |
+       +--------------------------------------------------------------------+
+       |  Commit                                                            |
+       |                                                                    |
+       |  * Set CommitTime = now;                                           |
+       |  * Wait for block, then stage/save/commit block;                   |
+       +--------------------------------------------------------------------+
+
+
+```
 
 5. 通过wal机制保证断点恢复， 状态转换前先write转换参数， 恢复时只需逐层load转换参数即可。
 
