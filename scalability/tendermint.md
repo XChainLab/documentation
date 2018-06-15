@@ -9,7 +9,7 @@
 + _节点之间可以相互同步part， 完整性验证可由merkel proof 保证， 避免了消息下发中心化的问题_
 + _第二、三轮的投票仅需proposal头部即可， 消息体尺寸极大的降低了_ 
 
-2. 通过维护远程节点的镜像来同步Message， 实现过程是：在于远程节点连接够，本地节点开启三个同步Routine及一个订阅了本地事件的消息broker来维持节点间的消息同步
+2. 通过维护远程节点的镜像来同步Message， 实现过程是：在于远程节点连接后，本地节点开启三个同步Routine及一个订阅了本地事件消息的broker来维持节点间的消息同步
 + _gossipDataRoutine负责block、tx、proposal同步_
 + _gossipVoteRoutine负责vote转发， 作用有二： 1发现BFT节点， 2加快出块（原因有二：1消息是SignedMessage， 所以我们无需担心篡改的问题， 2我们只关心超过2/3正直的节点做出了选择即可发起下一轮投票或者saveBlock）_
 + _gossipMaj23Routine同步投票镜像，为VoteRoutine同步投票提供依据_
@@ -76,18 +76,18 @@ func handleTimeout(t timeoutInfo){
 }
 ```
 
-4. 通过状态机转换来简化投票过程， 主要三个状态是proposal、prevote、precommit、以及主要状态各自对应的wait状态、另外在家开始的俩个状态NewHeight、NewRound以及结束的commit状态攻击九个状态， 状态转换通过超时、获得超过2/3投票来过渡。  
+4. 通过状态机转换来简化投票过程， 主要三个状态是proposal、prevote、precommit、以及主要状态各自对应的wait状态、另外在家开始的俩个状态NewHeight、NewRound以及结束的commit状态攻击九个状态， 状态转换通过超时、获得超过2/3投票来过渡。
 
-5. 通过wal机制保证断点恢复， 状态转换前先write转换参数， 恢复时只需逐层load转换参数即可
+5. 通过wal机制保证断点恢复， 状态转换前先write转换参数， 恢复时只需逐层load转换参数即可。
 
-6. 惩罚BFT节点的算法如下
+6. 惩罚BFT节点的算法
 ```python
   1. 开始Block高度为H的投票
   2. 本地节点收到节点A的投票，将投票加入本地VoteSet集合 
-  3. 收到其他节点发来节点A的投票， 该投票与本地VoteSet中的投票冲突
-  4.  将冲突证据加入EvidencePool并广播证据
-  5.  高度为H的投票结束，开始执行BLock中Transaction并且依据Block的Evidence惩罚BFT节点， 开始H+1 的投票
-  6.  proposer创建高度为H+1 Block, 将收到的冲突证据加入到Block中
-  7.  开始 2～5
+  3. 收到节点B发来节点A的投票， 该投票与本地VoteSet中的投票冲突
+  4. 将冲突证据加入EvidencePool并广播证据
+  5. 高度为H的投票结束，开始执行BLock中Transaction并且依据Block的Evidence惩罚BFT节点， 开始H+1 的投票
+  6. proposer创建高度为H+1 Block, 将收到的冲突证据加入到Block中
+  7. 开始 2～5
 ```  
 
