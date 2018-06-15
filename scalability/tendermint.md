@@ -4,6 +4,7 @@
 + _将序列化的block拆分为[][]byte数组_
 + _依据以上数组创建merkel tree_
 + _依据叶子节点及其merkel proof创建part, merkel proof 可归结使用叶子节点及其叔父节点推导祖父节点的重复过程直至推导出root节点
+[算法实现python版](https://github.com/XChainLab/documentation/tree/master/scalability/split.py)
 
 拆分的作用解释
 + _节点之间可以相互同步part， 完整性验证可由merkel proof 保证， 避免了消息下发中心化的问题_
