@@ -22,7 +22,7 @@ def hash_pair(pair):
     md5.update(pair[1].encode("utf-8"))
     return md5.hexdigest()
 
-def build_metkel_tree(nodes):
+def build_merkel_tree(nodes):
     start = 0
     while True:
         uplevel = []
@@ -75,7 +75,7 @@ def build_block_parts(data):
     leaves = split_in_fixed_size(data)
     raw_leaves_len = len(leaves)
     leaves = patch_balanced_btree_leaves(leaves)
-    nodes = build_metkel_tree(leaves)
+    nodes = build_merkel_tree(leaves)
     block = Block(nodes[len(nodes)-1], [], raw_leaves_len)
     leaves_len = len(leaves)
     paths = build_proof_paths(int(math.log(len(nodes)+1, 2)))
