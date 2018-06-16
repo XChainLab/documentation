@@ -1,4 +1,4 @@
-# -*- coding=UTF-8 -*-
+  # -*- coding=UTF-8 -*-
 import hashlib
 import math
 import itertools
@@ -8,6 +8,7 @@ Part = collections.namedtuple("Part", ["part1", "part2", "proofs"])
 Proof = collections.namedtuple("Proof", ["index", "proof"])
 
 def split_in_fixed_size(data, fixed_size=10):
+    data += "".join([" " for i in range(fixed_size-1)])
     return [data[i*fixed_size:(i+1)*fixed_size] for i in range(int(len(data)/fixed_size))]
 
 def make_pairs(_nodes):
@@ -55,7 +56,11 @@ def build_proof_paths(tree_len):
                 idx += 1
             proof_indexes.append([proof_indexes[uncle], idx])
             proof_indexes.append([proof_indexes[uncle], idx+1])
-    return proof_indexes[int(math.pow(2, tree_len-2))-1:int(math.pow(2, tree_len-1))-1]
+    proof_paths = proof_indexes[int(math.pow(2, tree_len-2))-1:int(math.pow(2, tree_len-1))-1]
+    proof_paths = proof_paths[::-1]
+    for i in range(0, len(proof_paths) ,2):
+        proof_paths[i], proof_paths[i+1] = proof_paths[i+1], proof_paths[i]
+    return proof_paths
 
 def flatten_list(path):
      rt = []
@@ -75,12 +80,23 @@ def build_block_parts(data):
     leaves_len = len(leaves)
     paths = build_proof_paths(int(math.log(len(nodes)+1, 2)))
     nodes_len = len(nodes)
-    for i in range(0, raw_leaves_len, 2):
-          path = flatten_list(paths[int(i/2)])[::-1]
-          proofs = [Proof(nodes_len-i, nodes[nodes_len-1-i]) for i in path]
-          part = Part(leaves[i], leaves[i+1], proofs)
-          block.parts.append(part)
+    leaf_pairs = list(make_pairs(leaves[:raw_leaves_len]))
+    nodes = nodes[::-1]
+    for i in range(int(raw_leaves_len/2)):
+        path = flatten_list(paths[i])[::-1]
+        proofs = [Proof(j, nodes[j]) for j in path]
+        part = Part(leaf_pairs[i][0], leaf_pairs[i][1], proofs)
+        block.parts.append(part)
     return block
 
-def verif_part():
-    pass
+def verif_part(part, root):
+    if root != part.proofs[len(part.proofs)-1].proof:
+        return False
+    mediate_hash = hash_pair([part.part1, part.part2])
+    proof_len = len(part.proofs)
+    for idx in range(0, proof_len-1):
+        pair = ([mediate_hash, part.proofs[idx].proof])
+        if part.proofs[idx].index%2==0:
+            pair = pair[::-1]
+        mediate_hash = hash_pair(pair)
+    return True if mediate_hash == root else False
