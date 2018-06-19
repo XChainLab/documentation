@@ -123,6 +123,7 @@ int commandMain(int argc,char** argv)
 </br>
 工作其实非常简单，加载WAST的模块到中间IR，然后保存成二进制的文件。保存的那个函数非常简单没啥可说的，分析下加载：
 </br>
+
 ``` c++
 inline bool loadTextModule(const char* filename,IR::Module& outModule)
 {
