@@ -21,6 +21,7 @@ XChainLab Documentation.
    - [eos源码分析之二网络](eos/eos源码分析之二网络.md)
    - [eos源码分析之三交易](eos/eos源码分析之三交易.md)
    - [eos源码分析之四智能合约](eos/eos源码分析之四智能合约.md)
+   - [eos源码分析之五虚拟机](eos/eos源码分析之五虚拟机.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
