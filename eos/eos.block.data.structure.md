@@ -16,13 +16,13 @@
 ```c++
 // ..../eos/libraries/chain/include/eosio/chain/block.hpp
 struct signed_block : public signed_block_header {
-	 using signed_block_header::signed_block_header;
-	 signed_block() = default;
-	 signed_block( const signed_block_header& h ):signed_block_header(h){}
+   using signed_block_header::signed_block_header;
+   signed_block() = default;
+   signed_block( const signed_block_header& h ):signed_block_header(h){}
 
    // 交易集合
-	 vector<transaction_receipt>   transactions;
-	 extensions_type               block_extensions;
+   vector<transaction_receipt>   transactions;
+   extensions_type               block_extensions;
 };
 using signed_block_ptr = std::shared_ptr<signed_block>;
 
@@ -41,16 +41,16 @@ block_extensions则定义了一系列的扩展信息，这些信息都由一个�
 struct transaction_receipt_header {
 	 // 定义交易状态的枚举类型
 	 enum status_enum {
-		  // 这个表示执行成功（所以不需要执行出错逻辑）
-			executed  = 0,
-			// 客观的来说，执行失败了（或者没有执行），某一个出错逻辑执行了
-			soft_fail = 1,
-			// 执行失败了，并且执行的出错逻辑也失败了，所以并没有状态改变
-			hard_fail = 2,
-			// 交易被延迟了，计划到未来的某个时间执行
-			delayed   = 3,
-			// 交易过期了，并且存储空间返还给用户
-			expired   = 4  ///< transaction expired and storage space refuned to user
+      // 这个表示执行成功（所以不需要执行出错逻辑）
+      executed  = 0,
+      // 客观的来说，执行失败了（或者没有执行），某一个出错逻辑执行了
+      soft_fail = 1,
+      // 执行失败了，并且执行的出错逻辑也失败了，所以并没有状态改变
+      hard_fail = 2,
+      // 交易被延迟了，计划到未来的某个时间执行
+      delayed   = 3,
+      // 交易过期了，并且存储空间返还给用户
+      expired   = 4  ///< transaction expired and storage space refuned to user
 	 };
 
 	 // 状态数据
@@ -75,10 +75,10 @@ packed_transaction，顾名思义，就是把交易数据打包了，这个结�
 struct packed_transaction {
 	 // 定义打包数据是否压缩的枚举类型
 	 enum compression_type {
-		  // 没有压缩
-			none = 0,
-			// 使用zlib压缩
-			zlib = 1,
+      // 没有压缩
+      none = 0,
+      // 使用zlib压缩
+      zlib = 1,
 	 };
 	 // 签名信息
 	 vector<signature_type>                  signatures;
@@ -184,14 +184,14 @@ struct signed_block_header : public block_header
 ```c++
 // ..../eos/contracts/eosiolib/action.hpp
 struct action {
-	// 账户：操作的来源
-  account_name               account;
-	// 名称：操作的标识
-  action_name                name;
-	// 授权：执行操作的许可列表
-  vector<permission_level>   authorization;
-	// 数据：执行操作需要用到的信息
-  bytes                      data;
+   // 账户：操作的来源
+   account_name               account;
+   // 名称：操作的标识
+   action_name                name;
+   // 授权：执行操作的许可列表
+   vector<permission_level>   authorization;
+   // 数据：执行操作需要用到的信息
+   bytes                      data;
 }
 ```
 
