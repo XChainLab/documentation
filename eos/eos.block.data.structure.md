@@ -39,8 +39,8 @@ block_extensions则定义了一系列的扩展信息，这些信息都由一个�
 ```c++
 // ..../eos/libraries/chain/include/eosio/chain/block.hpp
 struct transaction_receipt_header {
-	 // 定义交易状态的枚举类型
-	 enum status_enum {
+   // 定义交易状态的枚举类型
+   enum status_enum {
       // 这个表示执行成功（所以不需要执行出错逻辑）
       executed  = 0,
       // 客观的来说，执行失败了（或者没有执行），某一个出错逻辑执行了
@@ -51,18 +51,18 @@ struct transaction_receipt_header {
       delayed   = 3,
       // 交易过期了，并且存储空间返还给用户
       expired   = 4  ///< transaction expired and storage space refuned to user
-	 };
+   };
 
-	 // 状态数据
-	 fc::enum_type<uint8_t,status_enum>   status;
-	 // CPU使用情况
-	 uint32_t                             cpu_usage_us;
-	 // 网络使用情况
-	 fc::unsigned_int                     net_usage_words;
+   // 状态数据
+   fc::enum_type<uint8_t,status_enum>   status;
+   // CPU使用情况
+   uint32_t                             cpu_usage_us;
+   // 网络使用情况
+   fc::unsigned_int                     net_usage_words;
 };
 
 struct transaction_receipt : public transaction_receipt_header {
-	 fc::static_variant<transaction_id_type, packed_transaction> trx;
+   fc::static_variant<transaction_id_type, packed_transaction> trx;
 };
 ```
 
@@ -73,21 +73,22 @@ packed_transaction，顾名思义，就是把交易数据打包了，这个结�
 ```c++
 // ..../eos/libraries/chain/include/eosio/chain/transaction.hpp
 struct packed_transaction {
-	 // 定义打包数据是否压缩的枚举类型
-	 enum compression_type {
+   // 定义打包数据是否压缩的枚举类型
+   enum compression_type {
       // 没有压缩
       none = 0,
       // 使用zlib压缩
       zlib = 1,
-	 };
-	 // 签名信息
-	 vector<signature_type>                  signatures;
-	 // 是否压缩的标识信息
-	 fc::enum_type<uint8_t,compression_type> compression;
-	 // 上下文无关的信息
-	 bytes                                   packed_context_free_data;
-	 // 打包后的交易数据
-	 bytes                                   packed_trx;
+   };
+
+   // 签名信息
+   vector<signature_type>                  signatures;
+   // 是否压缩的标识信息
+   fc::enum_type<uint8_t,compression_type> compression;
+   // 上下文无关的信息
+   bytes                                   packed_context_free_data;
+   // 打包后的交易数据
+   bytes                                   packed_trx;
 }
 ```
 
