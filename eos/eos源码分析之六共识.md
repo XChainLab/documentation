@@ -494,6 +494,7 @@ try {
  </br>
  真正的出块是在controller.hpp.cpp中，需要注意的是按照EOS一惯的风格，真正的代码在controller_impl类中：
  </br>
+ 
  ``` c++
  void start_block( block_timestamp_type when, uint16_t confirm_block_count, controller::block_status s ) {
     FC_ASSERT( !pending );
@@ -557,7 +558,9 @@ try {
     update_producers_authority();//更新生产者相关的权限
     guard_pending.cancel();//解除锁
  }
+ 
  ```
+ 
  </br>
  finalize_block 、sign_block、 commit_block 、abort_block等与签名和提交部分的代码都在这个模块中，就不再赘述，看代码就可以了。
  </br>
