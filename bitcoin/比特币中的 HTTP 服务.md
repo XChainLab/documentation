@@ -1,3 +1,4 @@
+
 ###比特币中的 HTTP 服务
 ---
 bitcoind 通过 http 服务向外界提供了一系列基于 json-rpc 规范的 rpc 命令，这些命令涉及挖矿、交易、链信息查询等。本篇文章简要介绍其具体实现。
@@ -30,9 +31,10 @@ public:
 };
 ```
 server.cpp 文件中定义了一个 CRPCTable 类型的对象 tableRPC，bitcoind 在启动时会把所有的相关 rpc 命令通过 appendCommand 函数添加到 tableRPC。
+
 ####二、不同的 http 请求路径对应的处理函数
 类 HTTPPathHandler 中含有 http 请求的路径以及对应的处理函数，pathHandlers 是一个这种类型的 vector，可通过 RegisterHTTPHandler 函数向 pathHandlers 中添加元素。
-```
+```cpp
 std::vector<HTTPPathHandler> pathHandlers;
 struct HTTPPathHandler
 {
@@ -60,7 +62,7 @@ bool StartHTTPRPC()
 }
 ```
 可见针对不同的路径这里都是调用 HTTPReq_JSONRPC 函数来处理 http 请求。由于客户端要把想调用的 rpc 命令以 json 格式放在 http 请求的 body 体中，所以这里的 http 服务只支持 post 请求。HTTPReq_JSONRPC 把 http 请求的数据解析到一个类 JSONRPCRequest 的对象 jreq 中，jreq 中含有 http 请求的路径以及从 body 体中解析出的 rpc 请求及参数，然后以 jreq 为参数去 tableRPC 中执行 rpc 命令对应的函数。部分代码如下：
-```
+```cpp
 static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
 {
     // JSONRPC handles only POST
@@ -108,9 +110,10 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
     return true;
 }
 ```
+
 ####三、借助 libevent 来提供 http 服务
 借助于 libevent，用少量代码就可以实现自己的 http 服务，不需要考虑复杂的网络连接请求等问题，以下是部分代码。
-```
+```cpp
 bool InitHTTPServer()
 {
     if (!InitHTTPAllowList())  // 设置允许的客户端地址
@@ -180,9 +183,10 @@ static void http_request_cb(struct evhttp_request* req, void* arg)
 }
 ```
 http_request_cb 根据请求路径到 pathHandlers 中查找对应的处理函数（这里都是 HTTPReq_JSONRPC），然后将找到的函数封装到 HTTPWorkItem 类型的对象 item 中，并将 item 放入 workQueue 中，由其它线程来进行处理。这里就涉及到一个典型的生产者消费者模型。
+
 ####四、典型的生产者消费者模型
 类模板 WorkQueue 定义了一个生产者消费者模型
-```
+```cpp
 /** HTTP request work item */
 class HTTPWorkItem final : public HTTPClosure
 {
@@ -252,7 +256,7 @@ static WorkQueue<HTTPClosure>* workQueue = nullptr;  // 以 HTTPClosure 为模�
 
 生产者：http_request_cb 根据 http 请求路径从 pathHandlers 中找出对应函数（这里都是 HTTPReq_JSONRPC），然后把该函数封装到 WorkItem 并放入 workQueue。
 消费者：bitcoind 在启动时创建了 rpcThreads 个线程，这些线程从 workQueue 中取出 WorkItem 并调用其函数调用运算符（也应是执行 HTTPReq_JSONRPC 函数）。代码如下：
-```
+```cpp
 bool StartHTTPServer()
 {
     LogPrint(BCLog::HTTP, "Starting HTTP server\n");
@@ -279,6 +283,7 @@ static bool ThreadHTTP(struct event_base* base, struct evhttp* http)
     return event_base_got_break(base) == 0;
 }
 ```
-(img/httpRPC.png)
+
+![流程图](img/httpRPC.png)
 
 注：具体的 rpc 命令以及以及其处理过程在 bitcoin/src/rpc 目录下的  rawtransaction.cpp、mining.cpp、blockchain.cpp、misc.cpp、net.cpp 文件中。
