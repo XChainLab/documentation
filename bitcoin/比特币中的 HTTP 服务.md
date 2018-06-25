@@ -1,9 +1,9 @@
 
-###比特币中的 HTTP 服务
+### 比特币中的 HTTP 服务
 ---
 bitcoind 通过 http 服务向外界提供了一系列基于 json-rpc 规范的 rpc 命令，这些命令涉及挖矿、交易、链信息查询等。本篇文章简要介绍其具体实现。
 
-####一、提供的 rpc 命令
+#### 一、提供的 rpc 命令
 源码中把所有的 rpc 命令都封装到类 CRPCCommand 中，并且用一个 CRPCTable 类来管理所有的 CRPCCommand，代码如下：
 ```cpp
 typedef UniValue(*rpcfn_type)(const JSONRPCRequest& jsonRequest); // 定义 rpc 命令调用的函数类型
@@ -32,7 +32,7 @@ public:
 ```
 server.cpp 文件中定义了一个 CRPCTable 类型的对象 tableRPC，bitcoind 在启动时会把所有的相关 rpc 命令通过 appendCommand 函数添加到 tableRPC。
 
-####二、不同的 http 请求路径对应的处理函数
+#### 二、不同的 http 请求路径对应的处理函数
 类 HTTPPathHandler 中含有 http 请求的路径以及对应的处理函数，pathHandlers 是一个这种类型的 vector，可通过 RegisterHTTPHandler 函数向 pathHandlers 中添加元素。
 ```cpp
 std::vector<HTTPPathHandler> pathHandlers;
@@ -111,7 +111,7 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
 }
 ```
 
-####三、借助 libevent 来提供 http 服务
+#### 三、借助 libevent 来提供 http 服务
 借助于 libevent，用少量代码就可以实现自己的 http 服务，不需要考虑复杂的网络连接请求等问题，以下是部分代码。
 ```cpp
 bool InitHTTPServer()
@@ -184,7 +184,7 @@ static void http_request_cb(struct evhttp_request* req, void* arg)
 ```
 http_request_cb 根据请求路径到 pathHandlers 中查找对应的处理函数（这里都是 HTTPReq_JSONRPC），然后将找到的函数封装到 HTTPWorkItem 类型的对象 item 中，并将 item 放入 workQueue 中，由其它线程来进行处理。这里就涉及到一个典型的生产者消费者模型。
 
-####四、典型的生产者消费者模型
+#### 四、典型的生产者消费者模型
 类模板 WorkQueue 定义了一个生产者消费者模型
 ```cpp
 /** HTTP request work item */
