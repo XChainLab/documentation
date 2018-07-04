@@ -134,7 +134,7 @@ libdevcore主要提供了基础的数据操作和编解码操作，libjulia是�
 </br>
 在分析solidity的源码时要注意LLL已经基本废弃了，所以这部分代码就不再关注了。在solc的主程序中启动调用了CommandLineInterface这个接口类，在这个接口类中首先调用parseArguments来确定各种编译的环境参数。如果出现什么问题，就直接退出。这点有些类似于LINUX的命令机制。而在主程序的最后，调用actOnInput这个函数来实现编译结果的文件序列化。
 </br>
-在这其中，未来版本的 Solidity 编译器甚至会将 Yul 用作中间语言，所以在solc中会出现很多相关的代码。
+需要注意的是，未来版本的 Solidity 编译器很可能会将 Yul 用作智能合约编译的中间语言（IR），因此在solc源码中会出现很多与其相关的代码。
 </br>
 其实solc编译的重点就在processInput这个函数中,主要就是下面三块：
 </br>
