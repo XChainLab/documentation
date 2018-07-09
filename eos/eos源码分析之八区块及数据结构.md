@@ -192,7 +192,7 @@ void commit_block( bool add_to_fork_db ) {
 </br>
 </br>
 
-## 三、相关的两个数据结构
+## 三、相关的几个数据结构
 
 </br>
 有几个数据结构比较重要：multi_index,optional和scoped_exit。
