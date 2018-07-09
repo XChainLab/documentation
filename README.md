@@ -24,6 +24,7 @@ XChainLab Documentation.
    - [eos源码分析之五虚拟机](eos/eos源码分析之五虚拟机.md)
    - [eos源码分析之六共识](eos/eos源码分析之六共识.md)
    - [eos源码分析之七钱包和帐户](eos/eos源码分析之七钱包和帐户.md)
+   - [eos源码分析之八区块和数据结构](eos/eos源码分析之八区块和数据结构.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
