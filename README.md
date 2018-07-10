@@ -34,6 +34,8 @@ XChainLab Documentation.
     - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
     - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
 - 虚拟机
+- p2p
+    - [架构设计](p2p/design)
 - 密码学
 - 测试相关
     - [主流区块链特点](testDoc/链调研的表.xlsx)
