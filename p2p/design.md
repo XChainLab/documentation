@@ -41,10 +41,11 @@ r = bytes_sent / (bytes_recv + 1)
 P = 1− 1/(1+exp(6−3r))
 ```
 ###### 1.2 节点发现
-pex算法本身很简单， 我们不做的过多的赘述。kademlia作为目前dht的主流实现，其算法主体思想如下
-    - A节点广播一个（hash， entry）的键值对， 一般为(节点ID, NetworkAddr)
-    - B将(hash, entry)加入本地table 
-    - B使用table提供基于距离关系的查找
+pex算法本身很简单， 我们不做的过多的赘述。kademlia作为目前dht的主流实现，其算法主体思想如下：
+
+    1. A节点广播一个（hash， entry）的键值对， 一般为(节点ID, NetworkAddr)
+    2. B将(hash, entry)加入本地table 
+    3. B使用table提供基于距离关系的查找
 
 table的结构为[距离]list， len(list) < 20（建议）， 将(hash, entry)加入table的大致过程如下， 可以一定程度的抵抗女巫攻击
 ```golang
@@ -232,7 +233,7 @@ func (self txHandler)Handle(code uint, msg []byte)error{
 链接的client端应该负责发送心跳包维持链接， server端释放不活跃、异常的client; 释放链接的同时应该同步通知与该节点交互的各个子模块。注意前文提到需要‘归还不同的令牌‘。
 </br>
 
-###### 3 总结
+#### 3 总结
 以上只是简单描述了设计几个核心模块时需要主要注意的问题以及几条建议，当然还有一些其他问题比如：流量控制、节点管理、ssl transport、Conn封装、消息去重等，这些问题之所以没有细说是因为它们不参与核心流程， 但是如果设计的时候没有考虑到，那么这个p2p模块也只能算是基本可用。
 
 p2p模块应该对外只承担消息发送与接受、对内实现节点发现的功能， 具体的业务逻辑不应该交由p2p处理，事实上主流公链也都采用如下的架构来解耦具体业务：
