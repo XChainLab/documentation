@@ -123,7 +123,7 @@ concat := func(a, b uint)uint{
 mod := func(x, y uint)uint{
     return x % y
 }
-pow := func(x, y)uint{
+pow := func(x, y uint)uint{
   return uint(math.Pow(x, y))
 }
 算法：
@@ -138,7 +138,7 @@ B    : set secret=mod(pow(va, b), p)=2 // 35184372088832% 23 = 2
   +                           +                      +                      + 
   已知信息  a,p,g,concat,mod   +  b, p,g,concat,mod   +  p,g,concat,mod      +   
   +                           +                      +                      + 
-  已知信息  vb, a, p, pow, mod +  va, a, p, pow, mod  +    p, pow, mod       + 
+  已知信息  vb, a, p, pow, mod +  va, b, p, pow, mod  +  va,vb,p,pow,mod     + 
   +                           +                      +                      +
   已知信息    secret           +   secret             +         -            +
   +-------------------------------------------------------------------------+
