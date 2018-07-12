@@ -1,12 +1,11 @@
-## 主流公链的p2p架构分析
+## p2p的架构设计及部分实现细节
 </br>
 
 #### 一 前言
-##### 工作方式
+##### 1 工作方式
 p2p模块总是在区块链的众多子模块中第一个启动，它承担将本地消息向外发送，获取外部消息的职责；获取与发送消息之前自身又需要维持一个最低的链接数，维持这个最低链接数就需要获取跟多节点信息。
-##### 本文介绍
+##### 2 本文介绍
 与区块链的多个子模块交互、消息传输的隐私性与安全性、去中心化等一系列问题，使得设计一个p2p模块自然会涉及到很多问题， 然而很多优秀的公链已经为我们提供了一些参考的实例。 本文分析主流公链的的p2p模块及实现的一些细节问题，但是限于篇幅的原因仅会给出部分具体实例。
-
 </br>
 
 ####  二 架构分析及实现细节
@@ -42,7 +41,7 @@ r = bytes_sent / (bytes_recv + 1)
 P = 1− 1/(1+exp(6−3r))
 ```
 ###### 1.2 节点发现
-pex算法本身很简单， 我们不做的过多的赘述。kademlia作为目前dht的主流实现，其算法思想如下
+pex算法本身很简单， 我们不做的过多的赘述。kademlia作为目前dht的主流实现，其算法主体思想如下
     - A节点广播一个（hash， entry）的键值对， 一般为(节点ID, NetworkAddr)
     - B将(hash, entry)加入本地table 
     - B使用table提供基于距离关系的查找
@@ -174,14 +173,14 @@ type PeerHandler interface {
 }
 
 type TopicHandler interface {
-	Initialize()
+	Setup()error
 	Handle(uint32, []byte) error // 远程节点向本节点发消息
-   ...
+        Treardown()
 }
 
 func readLoop(conn Conn){
    for{
-      data := conn.Read() // 消息完整性检测、数据加解密在conn层完成
+      data := conn.Read() // 消息完整性检测、数据加解密在conn封装层完成
       go disptath(data)
       ......
    }
@@ -190,8 +189,8 @@ func readLoop(conn Conn){
 var mTopicHandler map[string]TopicHandler
 
 func dispatch(data []byte){
-   topic, code, payload := decode(data) // 
-   h, exists := mTopicHandler[topic]
+   topic, code, payload := decode(data) 
+   h, exists := mTopicHandler[topic]  // 依据 topic做路由 
    if exists{
       h.Handle(code, payload)
    }
@@ -231,7 +230,6 @@ func (self txHandler)Handle(code uint, msg []byte)error{
 
 ###### 2.5 链接资源释放管理
 链接的client端应该负责发送心跳包维持链接， server端释放不活跃、异常的client; 释放链接的同时应该同步通知与该节点交互的各个子模块。注意前文提到需要‘归还不同的令牌‘。
-
 </br>
 
 ###### 3 总结
