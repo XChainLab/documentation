@@ -16,6 +16,7 @@ XChainLab Documentation.
     - [钱包的功能类图和流程图](bitcoin/钱包的功能类图和流程图.md)
     - [精通比特币之七挖矿和共识](bitcoin/精通比特币之七挖矿和共识.md)
 - 以太坊
+    - [基于以太坊区块链的电子存证应用](ethereum/cunzheng.md)
 - [EOS]
    - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
    - [eos源码分析之二网络](eos/eos源码分析之二网络.md)
