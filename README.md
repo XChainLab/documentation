@@ -1,8 +1,13 @@
+
+### 360区块链实验室公众号
+![qrcode](https://p2.ssl.qhimg.com/t014eaf6f590f45d97c.jpg)
+
+360区块链实验室公众号会每周定期推送优质文章，欢迎关注~
+
 # 目录
 XChainLab Documentation.
 
-
-- [比特币]
+- 比特币
     - [比特币源码的流程分析说明](bitcoin/比特币源码的流程分析说明.txt)
     - [比特币源码的整体流程图及说明.md](bitcoin/比特币源码的整体流程图及说明.md)
     - [Qt钱包的UI类图](bitcoin/Qt钱包的UI类图.md)
@@ -17,7 +22,7 @@ XChainLab Documentation.
     - [精通比特币之七挖矿和共识](bitcoin/精通比特币之七挖矿和共识.md)
 - 以太坊
     - [基于以太坊区块链的电子存证应用](ethereum/cunzheng.md)
-- [EOS]
+- EOS
    - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
    - [eos源码分析之二网络](eos/eos源码分析之二网络.md)
    - [eos源码分析之三交易](eos/eos源码分析之三交易.md)
