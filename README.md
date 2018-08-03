@@ -41,6 +41,7 @@ XChainLab Documentation.
     - [跨链小总结](scalability/跨链的应用小总结.docx)
 - 共识机制
     - [共识算法入门](consensus/consensus.basic.md)
+    - [共识算法之一：2PC](consensus/consensus.2pc.md)
     - [raft](http://thesecretlivesofdata.com/raft/)
     - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
     - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
