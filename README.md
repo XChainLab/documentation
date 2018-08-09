@@ -36,6 +36,7 @@ XChainLab Documentation.
 - polkadot
    - [波卡链源码分析之一介绍和源码模块](polkadot/波卡链源码分析之一介绍和源码模块.md)
    - [波卡链源码分析之二启动流程](polkadot/波卡链源码分析之二启动流程.md)
+   - [波卡链源码分析之三网络](polkadot/波卡链源码分析之三网络.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
