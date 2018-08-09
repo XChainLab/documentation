@@ -22,6 +22,8 @@ XChainLab Documentation.
     - [精通比特币之七挖矿和共识](bitcoin/精通比特币之七挖矿和共识.md)
 - 以太坊
     - [基于以太坊区块链的电子存证应用](ethereum/cunzheng.md)
+- Hyperledger Fabric
+    - [Hyperledger Fabric 数据结构](fabric/Fabric.block.data.structure.md)
 - EOS
    - [eos源码分析之一整体介绍](eos/eos源码分析之一整体介绍.md)
    - [eos源码分析之二网络](eos/eos源码分析之二网络.md)
@@ -40,8 +42,9 @@ XChainLab Documentation.
     - [Making Sense of Ethereum’s Layer 2 Scaling Solutions: State Channels, Plasma, and Truebit](https://medium.com/l4-media/making-sense-of-ethereums-layer-2-scaling-solutions-state-channels-plasma-and-truebit-22cb40dcc2f4)
     - [跨链小总结](scalability/跨链的应用小总结.docx)
 - 共识机制
-    - [共识算法入门](consensus/consensus.basic.md)
-    - [共识算法之一：2PC](consensus/consensus.2pc.md)
+    - [共识算法之：起源](consensus/consensus.basic.md)
+    - [共识算法之：2PC](consensus/consensus.2pc.md)
+    - [共识算法之：Paxos](consensus/consensus.paxos.md)
     - [raft](http://thesecretlivesofdata.com/raft/)
     - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
     - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
