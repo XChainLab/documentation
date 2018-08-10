@@ -36,14 +36,11 @@ Raft中Term图示
 
 先描述下Term的变化流程：Raft开始时所有Follower的Term为1，其中一个Follower的超时时间到期后转换为Candidate，Term加1（这时Term变为2），然后开始选举，这时候有几种情况会使Term发生改变：
 
-1：如果当前Term为2的任期内没有选举出Leader或出现异常，则Term递增，开始新一任期选举
+1： 如果当前Term为2的任期内没有选举出Leader或出现异常，则Term递增，开始新一任期选举
+2： 当这轮Term为2的周期选举出Leader后，过一段时间之后Leader挂掉了，然后其他Follower转为Candidate，Term递增，开始新一任期Leader选举
+3： 当Leader或Candidate发现自己的Term比别的Follower小，Leader或Candidate将转为Follower，Term递增
+4： 当Follower的Term比别的Term小，Follower也将更新Term保持与其他Follower一致
 
-2：当这轮Term为2的周期选举出Leader后，过一段时间之后Leader挂掉了，然后其他Follower转为Candidate，Term递增，开始新一任期Leader选举
-
-3：当Leader或Candidate发现自己的Term比别的Follower小，Leader或Candidate将转为Follower，Term递增
-
-4：当Follower的Term比别的Term小，Follower也将更新Term保持与其他Follower一致
-　　
 每次Term的递增都将发生新一轮的选举，Raft保证一个Term任期内只有一个Leader，在Raft正常运转中所有的节点的Term都是一致的，如果节点不发生故障一个Term会一直保持下去，当某节点收到的请求中Term比当前Term小时则拒绝该请求。
 　　
 
@@ -56,13 +53,10 @@ Raft中Term图示
 
 当一个节点的状态由Follower转换为Candidate后，立刻就触发了Leader选举，Candidate节点首先会把Term号加1，然后向所有其他节点发起Leader Request Vote请求，这时候有以下几种可能的情况发生：
 
-1：该Request Vote请求接收到n/2+1个节点（过半数）的投票，从Candidate转为Leader，然后立刻向其他节点发送heartBeat以保持Leader的正常运转。必须要收到过半数的投票，保证了在一个Term周期内，只有一个Leader存在
-
-2：在此期间如果收到其他节点发送过来的Append Entries请求，如该节点的Term号大于自己的Term号，则当前节点转为Follower，否则拒绝该请求，保持自己为Candidate
-
-3：收到其他节点的Request Vote请求，如果请求中的Term号大于Candidate当前的Term号，则认为自身的Term已经过期了，自身转换为Follower，并且给其他节点投票。如果其他节点的Term号小于自身的Term号，则拒绝该请求并保持自身的Candidate角色
-
-4：在此期间如果没有收到足够多的投票，然后会发生超时，则Term递增，发起新一轮选举
+1： 该Request Vote请求接收到n/2+1个节点（过半数）的投票，从Candidate转为Leader，然后立刻向其他节点发送heartBeat以保持Leader的正常运转。必须要收到过半数的投票，保证了在一个Term周期内，只有一个Leader存在
+2： 在此期间如果收到其他节点发送过来的Append Entries请求，如该节点的Term号大于自己的Term号，则当前节点转为Follower，否则拒绝该请求，保持自己为Candidate
+3： 收到其他节点的Request Vote请求，如果请求中的Term号大于Candidate当前的Term号，则认为自身的Term已经过期了，自身转换为Follower，并且给其他节点投票。如果其他节点的Term号小于自身的Term号，则拒绝该请求并保持自身的Candidate角色
+4： 在此期间如果没有收到足够多的投票，然后会发生超时，则Term递增，发起新一轮选举
 
 当一个Candidate转换成为Leader之后，需要周期性的发送心跳包（如果有正常的RPC请求情况下则可以不发心跳）保持自己Leader的角色（避免集群中其他节点认为没有Leader而开始选举）。
 
