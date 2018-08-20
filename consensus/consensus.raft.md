@@ -4,7 +4,7 @@
 
 ## 简介
 
-Paxos算法是分布式系统领域最重要的一致性算法，同时也是公认的最为艰深难懂的算法。为了解决这个晦涩难懂的问题，斯坦福大学的Diego Ongaro、John Ousterhout教授以容易理解（Understandability）为目标设计了这个新的一致性算法：Raft，并在2013年发布了论文：《In Search of an Understandable Consensus Algorithm》。为了验证这个容易理解的特性，他们分别在斯坦福大学和加州大学伯克利分校的分布式计算课程上，使用了Raft和Paxos两种算法，采用视频教学的方式来传授给学生，之后采用小测验的方式来验证。结果表明Raft比Paxos容易理解很多。
+Paxos算法是分布式系统领域最重要的一致性算法，同时也是公认的极为艰深难懂的算法。为了解决这个晦涩难懂的问题，斯坦福大学的Diego Ongaro、John Ousterhout教授以容易理解（Understandability）为目标设计了这个新的一致性算法：Raft，并在2013年发布了论文：《In Search of an Understandable Consensus Algorithm》。为了验证这个容易理解的特性，他们分别在斯坦福大学和加州大学伯克利分校的分布式计算课程上，使用了Raft和Paxos两种算法，采用视频教学的方式来传授给学生，之后采用小测验的方式来验证。结果表明Raft比Paxos容易理解很多。
 
 Raft和Paxos一样只要保证n/2+1节点（即超过半数节点）正常工作就能够提供服务。在设计层面，Raft把算法流程分为三个子问题：领导选举（Leader election）、日志复制（Log replication）、安全性（Safety）。 Raft开始时在集群中选举出Leader负责日志复制的管理，Leader接受来自客户端的事务请求（日志），并将它们复制给集群的其他节点，然后负责通知集群中其他节点提交日志，Leader负责保证其他节点与他的日志同步，当Leader宕机后集群其他节点会发起选举选出新的Leader。
 

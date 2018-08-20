@@ -48,6 +48,7 @@ XChainLab Documentation.
     - [共识算法之：2PC](consensus/consensus.2pc.md)
     - [共识算法之：Paxos](consensus/consensus.paxos.md)
     - [共识算法之：Raft](consensus/consensus.raft.md)
+    - [共识算法之：拜占庭将军问题](consensus/consensus.byzantine.generals.md)
     - [raft](http://thesecretlivesofdata.com/raft/)
     - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
     - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
