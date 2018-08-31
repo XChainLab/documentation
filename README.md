@@ -39,6 +39,8 @@ XChainLab Documentation.
    - [波卡链源码分析之三网络](polkadot/波卡链源码分析之三网络.md)
    - [波卡链源码分析之四交易](polkadot/波卡链源码分析之四交易.md)
    - [波卡链源码分析之五区块及共识](polkadot/波卡链源码分析之五区块及共识.md)
+- nebulas
+   - [星云链整体架构](nebulas/星云链的整体架构.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
