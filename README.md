@@ -43,7 +43,10 @@ XChainLab Documentation.
    - [星云链整体架构](nebulas/星云链的整体架构.md)
    - [星云链并行交易分析](nebulas/星云链的并行交易分析.md)
 - quorum
-   - [quorum隐私分析](quorum/quorum隐私分析.md)
+   - [Quorum介绍](quorum/quorum.introduction.md)
+   - [Quorum隐私分析](quorum/quorum隐私分析.md)
+   - [Quorum共识算法](quorum/quorum.raft.md)
+   - [Quorum节点授权管理](quorum/quorum.node.permission.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
