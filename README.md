@@ -47,6 +47,8 @@ XChainLab Documentation.
    - [Quorum隐私分析](quorum/quorum隐私分析.md)
    - [Quorum共识算法](quorum/quorum.raft.md)
    - [Quorum节点授权管理](quorum/quorum.node.permission.md)
+- cosmos
+   - [cosmos源码分析之一概述](cosmos/cosmos源码分析之一概述.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
