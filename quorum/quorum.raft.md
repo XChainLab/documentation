@@ -1,12 +1,11 @@
 
-
 # J.P.Morgan Quorum 共识算法
 
 ## 简介
 
-J.P.Morgan的Quorum是在Ethereum的基础上修改的，他们的理念之一就是，不要重复造轮子，小编很是认可这个理念。他们把Ethereum的PoW共识算法修改成了Raft算法，并且使用了etcd的Raft实现。由于Quorum是用于企业级分布式账本和智能合约平台，提供私有智能合约执行方案，是联盟链方案，而不是公链。所以项目方认为，在这种场景下，拜占庭容错是不需要的，分叉也是不会存在的。取而代之的是，需要更快的出块时间和交易确认。与QuorumChain相比较，这种共识算法还不会产生出“空快”，并且在需要的时候可以快速有效的创建出新块。
+J.P.Morgan的Quorum是在Ethereum的基础上修改的，他们的理念之一就是，不要重复造轮子，小编很是认可这个理念。他们把Ethereum的PoW共识算法修改成了Raft算法，并且使用了etcd的Raft实现。由于Quorum是用于企业级分布式账本和智能合约平台，提供私有智能合约执行方案，是联盟链方案，而不是公链。所以项目方认为，在这种场景下，拜占庭容错是不需要的，分叉也是不会存在的。取而代之的是，需要更快的出块时间和交易确认。这种共识算法还不会产生出“空快”，并且在需要的时候可以快速有效的创建出新块。
 
-在geth命令添加 --raft 标志，就会使得geth节点运行raft共识算法。
+在geth命令添加 --raft 选项，就会使得geth节点运行raft共识算法。
 
 ## 几个基本概念
 
@@ -27,9 +26,9 @@ Raft和Ethereum都有自己的“节点”概念，但它们稍微有点儿不�
 
 在Raft的Leader转换期间，其中有一小段时间，有多个节点可能假定自己具有产生新块的职责；本文稍后将更详细地描述如何保持正确性。
 
-我们使用现有的Etherum P2P传输层来负责在节点之间的通讯，但是只通过Raft的传输层来传输Block。它们是由Leader创造的，并从那里传输到集群的其余部分，总是以相同的顺序通过Raft传输。
+Quorum使用现有的Etherum P2P传输层来负责在节点之间的通讯，但是只通过Raft的传输层来传输Block。这些Block是由Leader创造的，并从那里传输到集群的其余部分，总是以相同的顺序通过Raft传输。
 
-当Leader创建新块时，不像在Ethereum中，块被写入数据库并立即成为链的新Head，我们只在新块通过Raft传输之后才插入块或将其设置为链的新Head。所有节点都会在锁定步骤中将链扩展到新的状态，就好像是他们在Raft中同步日志。
+当Leader创建新块时，不像在Ethereum中，块被写入数据库并立即成为链的新Head，只在新块通过Raft传输之后才插入块或将其设置为链的新Head。所有节点都会在锁定步骤中将链扩展到新的状态，就好像是他们在Raft中同步日志。
 
 从Ethereum的角度来说，Raft是通过实现 node/service.go 文件中的 Service 接口而集成的。一个独立的协议可以通过这个 Service 接口，注册到节点里面。
 
@@ -51,6 +50,8 @@ func RegisterRaftService(stack *node.Node, ctx *cli.Context, cfg gethConfig, eth
 }
 ```
 
+![](img/quorum.startup.jpg)
+
 
 ## 一笔交易的生命周期
 
@@ -70,7 +71,8 @@ func RegisterRaftService(stack *node.Node, ctx *cli.Context, cfg gethConfig, eth
 type NewMinedBlockEvent struct{ Block *types.Block }
 ```
 
-下面的三个代码块展示了，订阅事件，创建新块的时候触发事件，已经在接收端转发这个事件。
+下面的三个代码块展示了，订阅事件，创建新块的时候触发事件，以及在接收端转发这个事件。
+
 ```go
 // quorum/raft/handler.go
 func (pm *ProtocolManager) Start(p2pServer *p2p.Server) {
@@ -107,10 +109,8 @@ func (pm *ProtocolManager) minedBroadcastLoop() {
 
 ```
 
+5. serveLocalProposals在这个channel的出口处等待接收这个新块，它的任务是使用RLP的方式对这个block进行编码并且提交给Raft协议。一旦这个新块通过Raft的同步协议同步到了所有的节点，这个新块就成为整个链的最新Head。下面的代码块展示了这个过程。
 
-5. serveLocalProposals在这个channel的出口处等待接收这个新块，它的任务是使用RLP的方式对这个block进行编码并且提交给Raft协议。一旦这个新块通过Raft的同步协议同步到了所有的节点，这个新块就成为整个链的最新Head。
-
-下面的代码块展示了这个过程。
 ```go
 // quorum/raft/handler.go
 func (pm *ProtocolManager) serveLocalProposals() {
@@ -128,6 +128,7 @@ func (pm *ProtocolManager) serveLocalProposals() {
 ```
 
 ##### 在任意一个节点上
+
 6. 到了这个时间点，Raft协议会达成共识并且把包含新块的日志记录添加到Raft日志之中。Raft完成这一步是通过Leader发送AppendEntries给所有的Follower，并且所有的Follower对这个消息进行确认。一旦Leader收到了超过半数的确认消息，它就通知每一个节点，这个新的日志已经被永久性的写入日志。
 7. 这个新块通过Raft传输到整个网络之后，到达了eventLoop，在这里处理Raft的新日志项。他们从Leader通过pm.transport(rafthttp.Transport的一个instance)到达。
 
@@ -229,7 +230,7 @@ func (bc *BlockChain) PostChainEvents(events []interface{}, logs []*types.Log) {
 
 Raft负责达成共识, 有哪些区块可以被链接受。在最简单的情况下, 通过Raft的每个后续块都成为新的链Head。
 
-然而, 在一些比较极端的情况下, 可能会遇到一个新的块, 已经通过Raft传播到整个集群，但却不能作为新的链Head。在这些情况下, 利用Raft的日志顺序, 如果我们遇到一个块, 其parent目前不是链的Head, 我们只是简单地跳过这个日志条目。
+然而, 在一些比较极端的情况下, 可能会遇到一个新的块, 已经通过Raft传播到整个集群，但却不能作为新的链Head。在这种情况下, 利用Raft的日志顺序, 如果我们遇到一个块, 其parent目前不是链的Head, 我们只是简单地跳过这个日志条目。
 
 最常见的情况是, 在Leader发生变化时, 最有可能触发这种情况。领导者可以被认为是一个代理，这个代理应该创建新块，这通常都是正确的, 并且只有一个单一的新块创建者。但是不能依赖于一个新块创建者的最大并发量来保持正确性。在这样的过渡过程中, 两个节点可能会在短时间内都会创建新块。在这种情况下, 将会有一场竞赛, 成功扩展链条的第一块将会获胜, 竞赛的失败者将被忽略。
 
@@ -286,10 +287,10 @@ Quorum的方法不同于Ethereum的方法之一，是引入了一个新的概念
 
 由于这个过程可能重复发生，这些块（每个都有一个对其父块的引用）可以形成一种链。称之为“预测链”。
 
-在预测链形成的过程中，Quorum会持续跟踪交易池中的事务子集，这些事务子集已经加入到块中，只是这些块还没有放入到链中在预测链中）。
+在预测链形成的过程中，Quorum会持续跟踪交易池中的事务子集，这些事务子集已经加入到块中，只是这些块还没有放入到链中而是在预测链中）。
 
 
-由于竞赛的存在（如我们上面所详细描述的），有可能投机链的中间某些区块最终不会进入到链。在这种情况下，将会触发一个InvalidRaftOrdering事件，并且相应地清理预测链的状态。
+由于竞赛的存在（如我们上面所详细描述的），有可能预测链的中间某些区块最终不会进入到链。在这种情况下，将会触发一个InvalidRaftOrdering事件，并且相应地清理预测链的状态。
 
 这些预测链的长度目前还没有限制，但在未来可能会增加对这一点的支持。
 
@@ -305,7 +306,7 @@ Quorum的方法不同于Ethereum的方法之一，是引入了一个新的概念
 
 ## Raft传输层
 
-Qurom通过Raft(etch实现)内置的HTTP传输方法来传输block，从理论上来说，使用Ethereum的P2P网络来作为Raft的传输层也是可以的。在实际的测试中，在高负载的情况下，Raft内置的HTTP传输方法比geth中内置的P2P网络更为可靠。
+Quorum通过Raft(etcd实现)内置的HTTP传输方法来传输block，从理论上来说，使用Ethereum的P2P网络来作为Raft的传输层也是可以的。在实际的测试中，在高负载的情况下，Raft内置的HTTP传输方法比geth中内置的P2P网络更为可靠。
 
 在缺省情况下，Quorum监听50400端口，这个也可以通过--raftport参数来做配置。
 
@@ -322,6 +323,10 @@ Qurom通过Raft(etch实现)内置的HTTP传输方法来传输block，从理论�
 
 想要把一个节点加入到集群，那就进入JavaScript控制台，执行raft.addPeer(enodeId)命令。就像enode ID需要包含在静态节点JSON文件中一样，这个enode ID也必须要包含在raftport参数中。这个命令会分配一个新的raftID，并且返回。成功执行addPeer命令之后，就可以启动一个新的geth节点，并且添加参数 --raftjoinexisting RAFTID
 
+
+## 小结
+
+通过这篇文章对Quorum共识机制的介绍，我们可以看到，Quorum对于适合于自己的目标场景有着非常清晰的理解和认识，从而把Ethereum原生的PoW修改成适用于企业级的联盟链平台。
 
 
 -------------
