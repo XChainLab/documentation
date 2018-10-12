@@ -147,7 +147,7 @@ type Delegation struct {
 }
 ```
 </br>
-通化膨胀也是Cosmosr一个机制：
+通货膨胀也是Cosmos一个机制：
 </br>
 
 ``` go
