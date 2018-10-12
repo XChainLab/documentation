@@ -51,6 +51,7 @@ XChainLab Documentation.
    - [cosmos源码分析之一概述](cosmos/cosmos源码分析之一概述.md)
    - [cosmos源码分析之二cosmos-SDK流程](cosmos/cosmos源码分析之二cosmos-SDK流程.md)
    - [cosmos源码分析之三跨链交易](cosmos/cosmos源码分析之三跨链交易.md)
+   - [cosmos源码分析之四staking模块](cosmos/cosmos源码分析之四stakig模块.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
