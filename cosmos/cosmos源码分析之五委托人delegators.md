@@ -166,8 +166,10 @@ func delegate(ctx sdk.Context, k Keeper, delegatorAddr sdk.Address,
 }
 ```
 </br>
+
 将委托者和验证人绑定在一起是通过Msg的bond和unbond来实现的。
 </br>
+
 msg.go:
 </br>
 
