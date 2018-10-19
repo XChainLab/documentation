@@ -57,6 +57,7 @@
 </br>
 stake.go
 </br>
+
 ``` go
 // delegation bond for a delegated proof of stake system
 type Delegation interface {
@@ -79,6 +80,7 @@ type DelegationSet interface {
 </br>
 delegation.go
 </br>
+
 ``` go
 // Delegation represents the bond with tokens held by an account.  It is
 // owned by one delegator, and is associated with the voting power of one
@@ -131,6 +133,7 @@ func (b Delegation) HumanReadableString() (string, error) {
 </br>
 handler.go
 </br>
+
 ``` go
 // common functionality between handlers
 func delegate(ctx sdk.Context, k Keeper, delegatorAddr sdk.Address,
