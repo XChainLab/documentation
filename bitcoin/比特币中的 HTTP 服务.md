@@ -1,10 +1,10 @@
 
 ### 比特币中的 HTTP 服务
 ---
-bitcoind 通过 http 服务向外界提供了一系列基于 json-rpc 规范的 rpc 命令，这些命令涉及挖矿、交易、链信息查询等。本篇文章简要介绍其具体实现。
+bitcoind 通过 http 服务向外界提供了一系列基于 json-rpc 规范的 rpc 命令，这些命令涉及挖矿、交易、链信息查询等。本篇文章简要介绍其具体实现。通过对这些 rpc 命令的了解有助于更好的使用 bitcoind 提供的服务，这里还涉及到一个典型的生产者消费者模型。
 
 #### 一、提供的 rpc 命令
-源码中把所有的 rpc 命令都封装到类 CRPCCommand 中，并且用一个 CRPCTable 类来管理所有的 CRPCCommand，代码如下：
+源码中把每一个 rpc 命令都封装到类 CRPCCommand 中，该类包含命令的名字以及处理该命令时调用的函数等，并且用一个 CRPCTable 类来管理所有的 CRPCCommand，对于每一个调用 rpc 命令的请求，CRPCTable 会根据请求的命令查找其管理的 CRPCCommand，执行对应的处理函数，代码如下：
 ```cpp
 typedef UniValue(*rpcfn_type)(const JSONRPCRequest& jsonRequest); // 定义 rpc 命令调用的函数类型
 
@@ -13,7 +13,7 @@ class CRPCCommand
 public:
     std::string category; // 命令所属范围
     std::string name;  // 命令名字
-    rpcfn_type actor; // 命令执行时调用的函数
+    rpcfn_type actor; // 该命令调用的函数
     std::vector<std::string> argNames;
 };
 
@@ -33,7 +33,7 @@ public:
 server.cpp 文件中定义了一个 CRPCTable 类型的对象 tableRPC，bitcoind 在启动时会把所有的相关 rpc 命令通过 appendCommand 函数添加到 tableRPC。
 
 #### 二、不同的 http 请求路径对应的处理函数
-类 HTTPPathHandler 中含有 http 请求的路径以及对应的处理函数，pathHandlers 是一个这种类型的 vector，可通过 RegisterHTTPHandler 函数向 pathHandlers 中添加元素。
+类 HTTPPathHandler 中含有 http 请求的路径以及对应的处理函数，这和 CRPCCommand 非常相似，pathHandlers 是一个这种类型的 vector，可通过 RegisterHTTPHandler 函数向 pathHandlers 中添加 HTTPPathHandler 类型的元素。
 ```cpp
 std::vector<HTTPPathHandler> pathHandlers;
 struct HTTPPathHandler
@@ -112,7 +112,7 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
 ```
 
 #### 三、借助 libevent 来提供 http 服务
-借助于 libevent，用少量代码就可以实现自己的 http 服务，不需要考虑复杂的网络连接请求等问题，以下是部分代码。
+bitcoind 没有自己去做底层的网络编程，而是借助于比较成熟的网络编程库 libevent，这样用少量代码就可以实现自己的 http 服务，不需要考虑复杂的网络连接请求等问题，以下是部分代码。
 ```cpp
 bool InitHTTPServer()
 {
@@ -182,7 +182,7 @@ static void http_request_cb(struct evhttp_request* req, void* arg)
     }
 }
 ```
-http_request_cb 根据请求路径到 pathHandlers 中查找对应的处理函数（这里都是 HTTPReq_JSONRPC），然后将找到的函数封装到 HTTPWorkItem 类型的对象 item 中，并将 item 放入 workQueue 中，由其它线程来进行处理。这里就涉及到一个典型的生产者消费者模型。
+函数 http_request_cb 负责处理 http 请求， 它首先根据请求路径到 pathHandlers 中查找对应的处理函数（这里都是 HTTPReq_JSONRPC），然后将找到的函数封装到 HTTPWorkItem 类型的对象 item 中，并将 item 放入 workQueue 中，由其它线程来进行处理。这里就涉及到一个典型的生产者消费者模型。
 
 #### 四、典型的生产者消费者模型
 类模板 WorkQueue 定义了一个生产者消费者模型
@@ -254,9 +254,19 @@ public:
 static WorkQueue<HTTPClosure>* workQueue = nullptr;  // 以 HTTPClosure 为模板参数定义变量 workQueue。
 ```
 
-生产者：http_request_cb 根据 http 请求路径从 pathHandlers 中找出对应函数（这里都是 HTTPReq_JSONRPC），然后把该函数封装到 WorkItem 并放入 workQueue。
-消费者：bitcoind 在启动时创建了 rpcThreads 个线程，这些线程从 workQueue 中取出 WorkItem 并调用其函数调用运算符（也应是执行 HTTPReq_JSONRPC 函数）。代码如下：
+生产者：http_request_cb 根据 http 请求路径从 pathHandlers 中找出对应函数（这里都是 HTTPReq_JSONRPC），然后把该函数封装到 WorkItem 并放入 workQueue。  
+消费者：bitcoind 在启动时创建了 rpcThreads 个线程，这些线程(HTTPWorkQueueRun) 调用 WorkQueue 的 Run() 方法从 workQueue 中取出 WorkItem 并调用其函数调用运算符（执行 HTTPReq_JSONRPC 函数）。  
+这里使用 C++ 中提供的类 std::thread 来创建线程，代码如下所示：
 ```cpp
+/** Simple wrapper to set thread name and run work queue */
+static void HTTPWorkQueueRun(WorkQueue<HTTPClosure>* queue)
+{
+     RenameThread("bitcoin-httpworker");
+     queue->Run();
+}
+
+static std::vector<std::thread> g_thread_http_workers;
+
 bool StartHTTPServer()
 {
     LogPrint(BCLog::HTTP, "Starting HTTP server\n");
@@ -267,7 +277,7 @@ bool StartHTTPServer()
     threadHTTP = std::thread(std::move(task), eventBase, eventHTTP);
 
     for (int i = 0; i < rpcThreads; i++) {
-        g_thread_http_workers.emplace_back(HTTPWorkQueueRun, workQueue);
+        g_thread_http_workers.emplace_back(HTTPWorkQueueRun, workQueue);  //启动消费者线程
     }
     return true;
 }
