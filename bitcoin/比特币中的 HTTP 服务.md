@@ -254,8 +254,8 @@ public:
 static WorkQueue<HTTPClosure>* workQueue = nullptr;  // 以 HTTPClosure 为模板参数定义变量 workQueue。
 ```
 
-生产者：http_request_cb 根据 http 请求路径从 pathHandlers 中找出对应函数（这里都是 HTTPReq_JSONRPC），然后把该函数封装到 WorkItem 并放入 workQueue。  
-消费者：bitcoind 在启动时创建了 rpcThreads 个线程，这些线程(HTTPWorkQueueRun) 调用 WorkQueue 的 Run() 方法从 workQueue 中取出 WorkItem 并调用其函数调用运算符（执行 HTTPReq_JSONRPC 函数）。  
+生产者：http_request_cb 根据 http 请求路径从 pathHandlers 中找出对应函数（这里都是 HTTPReq_JSONRPC），然后把该函数封装到 WorkItem, 然后调用 workQueue 的成员函数 Enqueue 将 WorkItem 放入 workQueue 中，而 workQueue 封装了一个元素为 WorkItem 类型的队列。  
+消费者：bitcoind 在启动时创建了 rpcThreads 个消费者线程，这些线程(HTTPWorkQueueRun) 调用 WorkQueue 的 Run() 方法从 workQueue 中取出 WorkItem 并调用其函数调用运算符（执行 HTTPReq_JSONRPC 函数）。  
 这里使用 C++ 中提供的类 std::thread 来创建线程，代码如下所示：
 ```cpp
 /** Simple wrapper to set thread name and run work queue */
