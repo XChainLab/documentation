@@ -4,7 +4,7 @@
 </br>
 Photon是一种次级的费用代币，同样也是在Cosmos原生的。它的核心作用是用于交易。当然，它比Atom拥有更高的流动性。Photon，原意是不连续能量包的基本粒子，它可以携带调整的可见光。所以，干脆就叫光子（Photon）。
 </br>
-Photon不会和其它代币一样进行公开发售，那么怎么样才能得到这个代币呢？网上的资料（https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fblog.cosmos.network%2Fintroducing-the-hard-spoon-4a9288d3f0df）所方言是通过一次以太坊的状态的hard spoon来分发这种代币。
+Photon不会和其它代币一样进行公开发售，那么怎么样才能得到这个代币呢？网上的资料（https://medium.com/m/global-identity?redirectUrl=https%3A%2F%2Fblog.cosmos.network%2Fintroducing-the-hard-spoon-4a9288d3f0df）所言是通过一次以太坊的状态的hard spoon来分发这种代币。
 </br>
 
 ## 二、多代币和单一代币的比较
@@ -27,7 +27,7 @@ Cosmos的生态中，可以使用其进行费用的转移交付。换句话说�
 代币的分发，是通过复制整个以太坊的状态，这其中包括智能合约的状态，然后运行兼容的Ethermint的环境，将复制的状态（包括EVM）运行在Tendermint的共识上，这样在Cosmos网络启动时，以太坊的持有者，就可以要求获得Photon并将其转移到Cosmos的相关帐户上。需要说明的是，这个Photon获得的状态空间（Ethermint空间），只是一个获得代币的手段，它没有其它用处。
 </br>
 
-![photon](img/photon.jpg)
+![photon](img/Photon.jpg)
 </br>
 
 ## 三、总结
