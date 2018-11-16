@@ -56,6 +56,7 @@ XChainLab Documentation.
    - [cosmos源码分析之六验证人Validators](cosmos/cosmos源码分析之六验证人Validators.md)
    - [cosmos费用代币photon](cosmos/cosmos费用代币photon.md)
    - [cosmos源码分析之七Tendermint架构分析](cosmos/cosmos源码分析之七Tendermint架构分析.md)
+   - [cosmos源码分析之八Tendermint启动分析](cosmos/cosmos源码分析之八Tendermint启动分析.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
