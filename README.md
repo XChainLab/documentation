@@ -59,7 +59,7 @@ XChainLab Documentation.
    - [cosmos源码分析之八Tendermint启动分析](cosmos/cosmos源码分析之八Tendermint启动分析.md)
 - khipu
    - [khipu并行分析之一概述](khipu/khipu并行分析之一概述.md)
-   - [khipu并行分析之二状态和上下文](khipu并行分析之二状态和上下文.md)
+   - [khipu并行分析之二状态和上下文](khipu/khipu并行分析之二状态和上下文.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
