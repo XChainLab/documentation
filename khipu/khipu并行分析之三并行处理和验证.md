@@ -79,6 +79,8 @@ private def executeAndInsertBlocks(blocks: Vector[Block], parentTd: UInt256, isB
 ```
 </br>
 它们最终会调用execBlock中的executeBlockTransactions这个函数：
+</br>
+
 ```
 override def executeBlock(block: Block, validators: Validators)(implicit executor: ExecutionContext): Future[Either[BlockExecutionError, BlockResult]] = {
    val start1 = System.nanoTime
@@ -127,6 +129,7 @@ private def executeBlockTransactions(
 ```
 </br>
 下面是真正的并行函数：
+</br>
 
 ```
 private def executeTransactions_inparallel(
@@ -260,6 +263,7 @@ private def executeTransactions_inparallel(
 }
 ```
 这样一个并行的处理就开始了。
+</br>
 
 ## 2、并行的状态保存
 在上面开始并行交易后，会发现，真正用来处理并行的是调用validateAndExecuteTransaction这个函数，调用这个函数的地方有两处，一处是前面提到的TxProcessor中，另外一处在reExecute中。因为后者其实是处理错误异常的情况，所以直接看前面的就可以，它会调用executeTransaction，同时会计算一下费用。
@@ -387,6 +391,7 @@ def run[W <: WorldState[W, S], S <: Storage[S]](context: ProgramContext[W, S], i
 ```
 </br>
 他会根据不同的指定来调用不同的处理函数exec,举一个例子在sstore这个指令中，会对世界状态进行存储：
+</br>
 
 ```
 protected def exec[W <: WorldState[W, S], S <: Storage[S]](state: ProgramState[W, S], params: (UInt256, UInt256)): ProgramState[W, S] = {
@@ -409,6 +414,7 @@ protected def exec[W <: WorldState[W, S], S <: Storage[S]](state: ProgramState[W
 ```
 </br>
 其它的都类似，不再一一赘述。
+</br>
 
 ## 3、并行的再处理
 前面提到过，如果状态合并有问题，就会再来一次。看一下这个代码：
@@ -423,6 +429,7 @@ def reExecute(stx: SignedTransaction, prevWorld: BlockWorldState) = {
 ```
 </br>
 其实去除相关的处理后发现和第一执行没有啥区别，其实它的原理也就是说，如果第一次合并冲突，那么第二次再执行时，极有可能就已经没有冲突了。
+</br>
 
 ## 4、并行的验证
 </br>
@@ -458,6 +465,7 @@ override def executeBlock(block: Block, validators: Validators)(implicit executo
 ```
 </br>
 验证的代码比较简单，其实就对并行的结果进行一下处理即可。
+</br>
 
 ## 5、并行的状态合并
 状态合并其实是重中之重，前面所有的并行有没有意义，是由他们促成的，如果无法促成，就只能回到串行执行，那成本可就大了。程序会在前面的并行交易函数中调用prevWorld.merge(txResult.world)，看一下这个函数：
