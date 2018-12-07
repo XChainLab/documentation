@@ -60,7 +60,7 @@ XChainLab Documentation.
 - khipu
    - [khipu并行分析之一概述](khipu/khipu并行分析之一概述.md)
    - [khipu并行分析之二状态和上下文](khipu/khipu并行分析之二状态和上下文.md)
-   - [khipu并行分析之三并行处理和验证.md](khipu/khipu并行分析之三并行处理和验证.md.md)
+   - [khipu并行分析之三并行处理和验证.md](khipu/khipu并行分析之三并行处理和验证.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
