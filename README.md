@@ -61,6 +61,8 @@ XChainLab Documentation.
    - [khipu并行分析之一概述](khipu/khipu并行分析之一概述.md)
    - [khipu并行分析之二状态和上下文](khipu/khipu并行分析之二状态和上下文.md)
    - [khipu并行分析之三并行处理和验证.md](khipu/khipu并行分析之三并行处理和验证.md)
+- privacy
+   - [门罗币、ZEC和达世币的对比分析之一总体对比](privacy/门罗币、ZEC和达世币的对比分析之一总体对比.md)
 - 扩展性
     - [plasma](scalability/plasma/plasma-in-10-mins.md)
     - [跨链](scalability/Chain_Interoperability.md)
