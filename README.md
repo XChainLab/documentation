@@ -47,6 +47,8 @@ XChainLab Documentation.
    - [Quorum隐私分析](quorum/quorum隐私分析.md)
    - [Quorum共识算法](quorum/quorum.raft.md)
    - [Quorum节点授权管理](quorum/quorum.node.permission.md)
+- monoxide
+   - [monoxide的简单分析和讨论](monoxide/monoxide的简单分析和讨论.md)
 - cosmos
    - [cosmos源码分析之一概述](cosmos/cosmos源码分析之一概述.md)
    - [cosmos源码分析之二cosmos-SDK流程](cosmos/cosmos源码分析之二cosmos-SDK流程.md)
