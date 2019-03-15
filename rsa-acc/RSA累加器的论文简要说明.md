@@ -2,7 +2,9 @@
 
 ## 一、目前对RSA累加器的相关论文
 目前RSA累加器的论文有好多，前面也介绍过，从1994年，RSA相关的研究就展开了。这里只介绍一篇斯坦福大学的针对区块链的默克尔树的相关的这方面的论文，即《Batching Techniques for Accumulators with Applications to IOPs and Stateless Blockchains》，中文《用于IOP和无状态区块链的累加器批处理技术》。这篇论文的地址在：
+</br>
 https://eprint.iacr.org/eprint-bin/getfile.pl?entry=2018/1188&version=20190314:012023&file=1188.pdf
+</br>
 需要说明的是，这篇论文的的版本有好几个，更新的频率还是挺快的，大家需要根据实际情况来分析。
 
 ## 二、概要
@@ -27,24 +29,44 @@ https://eprint.iacr.org/eprint-bin/getfile.pl?entry=2018/1188&version=20190314:0
 ![poe](img/poe.png)
 
 同态原像的简洁证明：
+</br>
+
 ![pohp](img/pohp.png)
+</br>
 离散对数知识证明（POKE）：
+</br>
+
 ![poke](img/poke.png)
+</br>
 同态原像知识的简洁证明：
+</br>
+
 ![pokhp](img/pokhp.png)
+</br>
 离散对数的简洁零知识证明：
+</br>
+
 ![zkpokerep](img/zkpokrep.png)
 </br>
+
 ![zkpoke](img/zkpoke.png)
+</br>
 Aggregating Knowledge of Co-prime Roots（）：
+</br>
+
 ![pokcr](img/pokcr.png)
 </br>
+
 ![pokcrrep](img/pokcr-multiexp.png)
 ## 4、通用累加器
 这节主要是讲通用累加器的构建：
+</br>
+
 ![base](img/base-rsa.png)
 </br>
 累加器的构建步骤在论文上有详细的描述，在4.1节：
+</br>
+
 ![dy](img/rsa-dy.png)
 </br>
 下面是非交互式的证明：
@@ -54,6 +76,7 @@ Aggregating Knowledge of Co-prime Roots（）：
 在累加器的构造过程中，如果使用非交互式的方法可以大幅提高效率，正如在零知识证明之中一样，在累加器的
 ## 5、少量参数批向量承诺
 这节主要利用批处理来进行类似于默克尔树的验证方案：
+</br>
 
 ![transfer](img/transfer.png)
 使用bezout是用来进行非成员函数证明的。通过增加NI-POKE2来确保安全性。
