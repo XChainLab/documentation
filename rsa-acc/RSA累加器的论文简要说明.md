@@ -51,7 +51,7 @@ https://eprint.iacr.org/eprint-bin/getfile.pl?entry=2018/1188&version=20190314:0
 
 ![zkpoke](img/zkpoke.png)
 </br>
-Aggregating Knowledge of Co-prime Roots（）：
+Aggregating Knowledge of Co-prime Roots（翻译不好）：
 </br>
 
 ![pokcr](img/pokcr.png)
