@@ -51,6 +51,7 @@ XChainLab Documentation.
    - [monoxide的简单分析和讨论](monoxide/monoxide的简单分析和讨论.md)
 - rsa-acc
    - [RSA累加器的介绍](rsa-acc/RSA累加器的介绍.md)
+   - [RSA累加器的介绍](rsa-acc/RSA累加器的论文简要说明.md)
 - cosmos
    - [cosmos源码分析之一概述](cosmos/cosmos源码分析之一概述.md)
    - [cosmos源码分析之二cosmos-SDK流程](cosmos/cosmos源码分析之二cosmos-SDK流程.md)
