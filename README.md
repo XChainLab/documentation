@@ -53,6 +53,7 @@ XChainLab Documentation.
    - [RSA累加器的介绍](rsa-acc/RSA累加器的介绍.md)
    - [RSA累加器的论文简要说明](rsa-acc/RSA累加器的论文简要说明.md)
    - [pairing的初步](rsa-acc/pairing的初步.md)
+   - [一个pairing库的介绍](rsa-acc/一个pairing库的介绍.md)
 - cosmos
    - [cosmos源码分析之一概述](cosmos/cosmos源码分析之一概述.md)
    - [cosmos源码分析之二cosmos-SDK流程](cosmos/cosmos源码分析之二cosmos-SDK流程.md)
