@@ -88,6 +88,7 @@ XChainLab Documentation.
     - [以太坊的PoW共识机制](consensus/ethereum.pow.md)
     - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
 - 虚拟机
+    - [webassembly技术](evm-ewasm/webassembly技术.md)
 - p2p
     - [架构设计](p2p/design)
 - 密码学
