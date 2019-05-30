@@ -12,10 +12,15 @@ webassembly就是为了性能而生，它在Web前端的应用可以大幅的提
 在webassembly中有两种文件格式，即wat,wasm,另外还有一个wat的超集wast,可以这样理解，wast是人类易理解的文本格式，wasm是机器识别的格式。
 网上有很多的开发相关的工具和在线网站：
 https://webassembly.studio/
+</br>
 https://wasdk.github.io/WasmFiddle/
+</br>
 https://webassembly.github.io/wabt/demo/wat2wasm/
+</br>
 https://github.com/WebAssembly/wabt
+</br>
 https://github.com/emscripten-core/emscripten
+</br>
 https://github.com/AssemblyScript/assemblyscript
 
 ## 二、现状
