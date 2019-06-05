@@ -72,6 +72,7 @@ Type的类型目前只有12种：
 </br>
 
 ![type](img/wasm-sectiontype.png)
+</br>
 它们的编码，依次排序下去。其在WA的官网的文件中Module中可以推导出以下的形式：
 </br>
 
