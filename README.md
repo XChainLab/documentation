@@ -89,6 +89,7 @@ XChainLab Documentation.
     - [Hyperledger Fabric的PBFT共识机制](consensus/fabric.pbft.md)
 - 虚拟机
     - [webassembly技术](VM/evm-ewasm/webassembly技术.md)
+    - [wasm文件格式](VM/evm-ewasm/wasm文件格式.md)
 - p2p
     - [架构设计](p2p/design)
 - 密码学
