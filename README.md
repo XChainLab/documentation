@@ -91,7 +91,7 @@ XChainLab Documentation.
     - [webassembly技术](VM/evm-ewasm/webassembly技术.md)
     - [wasm文件格式](VM/evm-ewasm/wasm文件格式.md)
 - p2p
-    - [架构设计](p2p/design)
+    - [架构设计](p2p/design.md)
 - 密码学
 - 测试相关
     - [主流区块链特点](testDoc/链调研的表.xlsx)
