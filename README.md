@@ -90,6 +90,7 @@ XChainLab Documentation.
 - 虚拟机
     - [webassembly技术](VM/evm-ewasm/webassembly技术.md)
     - [wasm文件格式](VM/evm-ewasm/wasm文件格式.md)
+    - [wasm的相关接口](VM/evm-ewasm/wasm的相关接口.md)
 - p2p
     - [架构设计](p2p/design)
 - 密码学
