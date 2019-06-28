@@ -92,6 +92,7 @@ XChainLab Documentation.
     - [wasm文件格式](VM/evm-ewasm/wasm文件格式.md)
     - [wasm的相关接口](VM/evm-ewasm/wasm的相关接口.md)
     - [wasm的编译](VM/evm-ewasm/wasm的编译.md)
+    - [wasm的执行](VM/evm-ewasm/wasm的执行.md)
 - p2p
     - [架构设计](p2p/design)
 - 密码学
