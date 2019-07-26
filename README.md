@@ -41,6 +41,7 @@ XChainLab Documentation.
    - [波卡链源码分析之五区块及共识](polkadot/波卡链源码分析之五区块及共识.md)
 - libra
    - [libra的支付分析](libra/libra的支付分析.md)
+   - [move语言的重点分析](libra/move语言的重点分析.md)
 - nebulas
    - [星云链整体架构](nebulas/星云链的整体架构.md)
    - [星云链并行交易分析](nebulas/星云链的并行交易分析.md)
