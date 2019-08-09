@@ -97,6 +97,7 @@ XChainLab Documentation.
     - [wasm的编译](VM/evm-ewasm/wasm的编译.md)
     - [wasm的执行](VM/evm-ewasm/wasm的执行.md)
     - [智能合约的bytecode分析](VM/solc/智能合约的bytecode分析.md)
+    - [以太坊对WASM的支持](VM/evm-ewasm/以太坊对WASM的支持.md)
 - p2p
     - [架构设计](p2p/design)
 - 密码学
