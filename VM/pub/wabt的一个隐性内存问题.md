@@ -56,6 +56,7 @@ p = pTmp;
 ```
 </br>
 可能代码看上去不如上面的优雅，但是却安全了。
+
 ## 2、0内存分配使用的问题
 在C语言中，使用malloc(0)是正确的，而且可以用free却释放返回的指针，不会有任何问题。但是看一下realloc这个函数使用0做分配参数时，会是什么结果呢？
 “Otherwise, if size is zero, the memory previously allocated at ptr is deallocated as if a call to free was made, and a null pointer is returned.（c/c++98）
