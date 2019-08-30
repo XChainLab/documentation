@@ -99,7 +99,7 @@ XChainLab Documentation.
     - [智能合约的bytecode分析](VM/solc/智能合约的bytecode分析.md)
     - [以太坊对WASM的支持](VM/evm-ewasm/以太坊对WASM的支持.md)
     - [EOS对WASM的支持](VM/evm-ewasm/EOS对WASM的支持.md)
-    - [wabt的一个隐性内存问题](VM/evm-ewasm/pub/wabt的一个隐性内存问题.md)
+    - [wabt的一个隐性内存问题](VM/pub/wabt的一个隐性内存问题.md)
 - p2p
     - [架构设计](p2p/design)
 - 密码学
