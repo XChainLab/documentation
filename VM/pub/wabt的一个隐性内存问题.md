@@ -59,6 +59,7 @@ p = pTmp;
 
 ## 2、0内存分配使用的问题
 在C语言中，使用malloc(0)是正确的，而且可以用free却释放返回的指针，不会有任何问题。但是看一下realloc这个函数使用0做分配参数时，会是什么结果呢？
+</br>
 “Otherwise, if size is zero, the memory previously allocated at ptr is deallocated as if a call to free was made, and a null pointer is returned.（c/c++98）
 </br>
 If size is zero, the return value depends on the particular library implementation: it may either be a null pointer or some other location that shall not be dereferenced.（c/c++11）”
