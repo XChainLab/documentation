@@ -163,7 +163,7 @@ ZUC:祖冲之算法，中国自主的流密码算法，主要应用于移动通�
 ## 六、附属资料
 本文件相关资源Github地址：
 </br>
-cccccccccccc
+https://github.com/XChainLab/documentation/blob/master/fabric-bccsp/fabric%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%9B%BD%E5%AF%86.md
 </br>
 国密系列《国家标准全文公开系统》地址：
 </br>
