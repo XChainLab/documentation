@@ -101,7 +101,7 @@ XChainLab Documentation.
     - [EOS对WASM的支持](VM/evm-ewasm/EOS对WASM的支持.md)
     - [wabt的一个隐性内存问题](VM/pub/wabt的一个隐性内存问题.md)
 - p2p
-    - [架构设计](p2p/design)
+    - [架构设计](p2p/design.md)
 - 密码学
 - 测试相关
     - [主流区块链特点](testDoc/链调研的表.xlsx)
