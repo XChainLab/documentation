@@ -113,3 +113,137 @@ XChainLab Documentation.
     - [200行Go代码实现区块链——挖矿算法](https://mp.weixin.qq.com/s/Nf7qg1nWaFYsO6x-yVyzxg)
     - [使用Go语言从零编写PoS区块链](https://mp.weixin.qq.com/s/eT1lXh32bsCKpZrwxQg7ww)
     - [使用Go语言编写区块链P2P网络](https://mp.weixin.qq.com/s/pHSull1QSxQWRvGyXSim5g)
+
+
+
+
+
+In English Documentation
+
+XChainLab Documentation
+
+**Bitcoin**
+- Explanation of Bitcoin Source Code Workflow
+- Overview of Bitcoin Source Code Flowchart
+- UI Class Diagram for Qt Wallet
+- Mastering Bitcoin Part One
+- Mastering Bitcoin Part Two
+- Mastering Bitcoin Part Three: Wallet and Transactions
+- Mastering Bitcoin Part Four: Detailed Transaction Analysis
+- Bitcoin Transaction Source Code Analysis
+- Mastering Bitcoin Part Six: Blockchain
+- Mastering Bitcoin Part Five: Network
+- Function Class Diagram and Flowchart for Wallets
+- Mastering Bitcoin Part Seven: Mining and Consensus
+
+**Ethereum**
+- Electronic Notarization Application on Ethereum Blockchain
+
+**Hyperledger Fabric**
+- Hyperledger Fabric Data Structures
+
+**EOS**
+- EOS Source Code Analysis Part One: Introduction and Source Modules
+- EOS Source Code Analysis Part Two: Network
+- EOS Source Code Analysis Part Three: Transactions
+- EOS Source Code Analysis Part Four: Smart Contracts
+- EOS Source Code Analysis Part Five: Virtual Machine
+- EOS Source Code Analysis Part Six: Consensus
+- EOS Source Code Analysis Part Seven: Wallets and Accounts
+- EOS Source Code Analysis Part Eight: Blocks and Data Structures
+
+**Polkadot**
+- Introduction and Source Code Modules for Polkadot Chain
+- Polkadot Chain Source Code Analysis Part Two: Startup Process
+- Polkadot Chain Source Code Analysis Part Three: Network
+- Polkadot Chain Source Code Analysis Part Four: Transactions
+- Polkadot Chain Source Code Analysis Part Five: Blocks and Consensus
+
+**Libra**
+- Analysis of Libra Payments
+- Key Analysis of the Move Language
+
+**Nebulas**
+- Overview of Nebulas Chain Architecture
+- Analysis of Parallel Transactions on Nebulas Chain
+
+**Quorum**
+- Introduction to Quorum
+- Quorum Privacy Analysis
+- Quorum Consensus Algorithms
+- Quorum Node Authorization Management
+
+**Monoxide**
+- Brief Analysis and Discussion of Monoxide
+
+**RSA-Accumulator**
+- Introduction to RSA Accumulators
+- Brief Overview of RSA Accumulator Paper
+
+**Pairing**
+- Preliminary Introduction to Pairing
+- Introduction to a Pairing Library
+
+**Cosmos**
+- Cosmos Source Code Analysis Part One: Overview
+- Cosmos Source Code Analysis Part Two: Cosmos-SDK Flow
+- Cosmos Source Code Analysis Part Three: Cross-Chain Transactions
+- Cosmos Source Code Analysis Part Four: Staking Module
+- Cosmos Source Code Analysis Part Five: Delegators
+- Cosmos Source Code Analysis Part Six: Validators
+- Cosmos Fee Token: Photon
+- Cosmos Source Code Analysis Part Seven: Tendermint Architecture
+- Cosmos Source Code Analysis Part Eight: Tendermint Startup Analysis
+
+**Khipu**
+- Khipu Parallel Analysis Part One: Overview
+- Khipu Parallel Analysis Part Two: State and Context
+- Khipu Parallel Analysis Part Three: Parallel Processing and Verification
+
+**Privacy**
+- Comparative Analysis of Monero, ZEC, and DASH Part One: Overall Comparison
+- Monero Ring Signature Analysis
+- DASH Coin Mixing Analysis
+- Zcash Zero-Knowledge Proof Analysis
+
+**Scalability**
+- Plasma
+- Cross-Chain
+- Making Sense of Ethereum’s Layer 2 Scaling Solutions: State Channels, Plasma, and Truebit
+- Cross-Chain Summary
+
+**Consensus Mechanisms**
+- Origins of Consensus Algorithms
+- Consensus Algorithm: Two-Phase Commit (2PC)
+- Consensus Algorithm: Paxos
+- Consensus Algorithm: Raft
+- Byzantine Fault Tolerance Problem
+
+**Raft**
+- Ethereum's PoW Consensus Mechanism
+- Hyperledger Fabric's PBFT Consensus Mechanism
+
+**Virtual Machines**
+- WebAssembly Technology
+- WebAssembly File Format
+- WebAssembly Related Interfaces
+- WebAssembly Compilation
+- WebAssembly Execution
+- Bytecode Analysis of Smart Contracts
+- Ethereum's Support for WASM
+- EOS's Support for WASM
+- Implicit Memory Issue in Wabt
+
+**P2P**
+- Architecture Design
+- Cryptography
+- Testing Related
+- Characteristics of Major Blockchains
+- Translated Articles
+- Securely Sharing Files on Blockchain with IPFS
+- Roaming Guide to Consensus Algorithms
+- Building Your Own Blockchain in Just 200 Lines of Go Code
+- Building Your Own Blockchain in 200 Lines of Go Code: Block Generation and Network Communication
+- Building Your Own Blockchain in 200 Lines of Go Code: Mining Algorithm
+- Writing a PoS Blockchain in Go
+- Writing a Blockchain P2P Network in Go
